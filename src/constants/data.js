@@ -1,10 +1,10 @@
 // Categories
 const categories = [
-    { id: 1, name: "Italian", value: "fine_dining", imageUrl: "/images/fine_dining.jpg" },
-    { id: 2, name: "Casual Dining", value: "casual_dining", imageUrl: "/images/casual_dining.jpg" },
-    { id: 3, name: "Fast Food", value: "fast_food", imageUrl: "/images/fast_food.jpg" },
-    { id: 4, name: "Cafe", value: "cafe", imageUrl: "/images/cafe.jpg" },
-    { id: 5, name: "Buffet", value: "buffet", imageUrl: "/images/buffet.jpg" },
+    { _id: 1, name: "Italian", value: "fine_dining", imageUrl: "/images/fine_dining.jpg" },
+    { _id: 2, name: "Casual Dining", value: "casual_dining", imageUrl: "/images/casual_dining.jpg" },
+    { _id: 3, name: "Fast Food", value: "fast_food", imageUrl: "/images/fast_food.jpg" },
+    { _id: 4, name: "Cafe", value: "cafe", imageUrl: "/images/cafe.jpg" },
+    { _id: 5, name: "Buffet", value: "buffet", imageUrl: "/images/buffet.jpg" },
   ];
   
   // Restaurants
@@ -165,5 +165,6 @@ const categories = [
   ];
 
 
-  export default { categories, restaurants, menu, reviews, reservations, profiles };
+  const data = { categories }; 
+  export { data };
   
