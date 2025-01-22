@@ -7,6 +7,21 @@ import CategoryItem from './CategoryItem';
 const CategoryList = ({setSelectedCategory, setSelectedSection, setSelectedValue}) => {
     const [selected, setSelected] = useState(null);
     const categories =[1, 2, 3, 5, 5] ;
+
+    const handleSelectedCategory = (item)   => {
+        if(selected === item.value){
+            setSelected(null);
+            setSelectedCategory(null);
+            setSelectedSection(null);
+            setSelectedValue(null);
+        }else{
+            setSelected(item.value);
+            setSelectedCategory(item._id);
+            setSelectedSection('category');
+            setSelectedValue(item.name);
+        } 
+    } 
+
   return (
     <FlatList
         data={data.categories}
@@ -14,9 +29,11 @@ const CategoryList = ({setSelectedCategory, setSelectedSection, setSelectedValue
         horizontal
         style={{marginTop: 5}}
         keyExtractor={(item) => item._id}
-        renderItem={({item}) => <TouchableOpacity>
+        renderItem={({item}) => (
+        <TouchableOpacity onPress={()=> handleSelectedCategory(item)}>
             <CategoryItem  selected={selected} category={item}/>
-        </TouchableOpacity>}
+        </TouchableOpacity>
+        )}
      />
   )
 }

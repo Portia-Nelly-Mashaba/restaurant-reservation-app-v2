@@ -1,10 +1,22 @@
 // Categories
 const categories = [
-    { _id: 1, name: "Italian", value: "fine_dining", imageUrl: "/images/fine_dining.jpg" },
-    { _id: 2, name: "Casual Dining", value: "casual_dining", imageUrl: "/images/casual_dining.jpg" },
-    { _id: 3, name: "Fast Food", value: "fast_food", imageUrl: "/images/fast_food.jpg" },
-    { _id: 4, name: "Cafe", value: "cafe", imageUrl: "/images/cafe.jpg" },
-    { _id: 5, name: "Buffet", value: "buffet", imageUrl: "/images/buffet.jpg" },
+    { _id: 1, name: "Italian", value: "fine_dining"},
+    { _id: 2, name: "Buffet", value: "buffet" },
+    { _id: 3, name: "Cafe", value: "cafe"},
+    { _id: 4, name: "Fast Food", value: "fast_food" },
+    { _id: 5, name: "Live Music", value: "casual_dining" },
+  ];
+
+  // ChoicesList
+
+  const choicesList = [
+    { id:1, name: "Recommended", value: "recommended"},
+    { id:2, name: "Near By", value: "near_by"},
+    { id:3, name: "5 Star", value: "5star"},
+    { id:4, name: "4 Star", value: "4star"},
+    { id:5, name: "3 Star", value: "3star"},
+    
+   
   ];
   
   // Restaurants
@@ -15,10 +27,10 @@ const categories = [
       category_id: 1,
       average_price: 50,
       hours_of_operation: "10:00 AM - 11:00 PM",
-      imageUrl: "/images/oceans_delight.jpg",
+      imageUrl: "https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&w=600",
       owner_id: 101,
       features: ["Kids Room", "Live Music"],
-      ratings: 4.7,
+      ratings: 3,
       coords: {
         coords_id: 1,
         latitude: 40.7128,
@@ -35,7 +47,7 @@ const categories = [
       category_id: 3,
       average_price: 15,
       hours_of_operation: "11:00 AM - 10:00 PM",
-      imageUrl: "/images/burger_house.jpg",
+      imageUrl: "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600g",
       owner_id: 102,
       features: ["Kids Room"],
       ratings: 4.3,
@@ -165,6 +177,6 @@ const categories = [
   ];
 
 
-  const data = { categories }; 
+  const data = { categories, choicesList, restaurants }; 
   export { data };
   
