@@ -72,7 +72,7 @@ const categories = [
       "foodType": ["Dessert"],
       "code": "41007428",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "1",
       "rating": 4.9,
       "ratingCount": "420",
       "description": "A classic Italian dessert made of layers of coffee-soaked ladyfingers and creamy mascarpone, topped with cocoa.",
@@ -87,7 +87,7 @@ const categories = [
       "foodType": ["Main Course"],
       "code": "41007429",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "2",
       "rating": 4.8,
       "ratingCount": "320",
       "description": "Traditional Italian pizza with fresh tomatoes, mozzarella cheese, basil, and olive oil.",
@@ -102,7 +102,7 @@ const categories = [
       "foodType": ["Drink"],
       "code": "41007430",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "2",
       "rating": 4.7,
       "ratingCount": "150",
       "description": "Creamy coffee drink made with espresso and steamed milk, topped with milk foam.",
@@ -117,7 +117,7 @@ const categories = [
       "foodType": ["Breakfast", "Vegan"],
       "code": "41007431",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "2",
       "rating": 4.6,
       "ratingCount": "210",
       "description": "Toasted bread topped with mashed avocado, olive oil, salt, and pepper.",
@@ -132,7 +132,7 @@ const categories = [
       "foodType": ["Snack"],
       "code": "41007432",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "1",
       "rating": 4.5,
       "ratingCount": "180",
       "description": "Crispy tortilla chips topped with melted cheese, jalapenos, and salsa.",
@@ -147,7 +147,7 @@ const categories = [
       "foodType": ["Main Course", "Vegan"],
       "code": "41007433",
       "isAvailable": true,
-      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "restaurant": "1",
       "rating": 4.8,
       "ratingCount": "250",
       "description": "Delicious plant-based burger patty served with lettuce, tomato, and vegan mayo.",
@@ -242,6 +242,6 @@ const categories = [
   ];
 
 
-  const data = { categories, choicesList, restaurants, menu }; 
+  const data = { categories, choicesList, restaurants, menu, reviews, reservations, profiles }; 
   export { data };
   
