@@ -67,30 +67,95 @@ const categories = [
   // Menu
   const menu = [
     {
-      food_id: 1,
-      restaurant_id: 1,
-      title: "Grilled Salmon",
-      food_type: ["Main Course"],
-      price: 25.0,
-      ratings: 4.5,
+      "_id": "65316968f94c6496dc84f3c1",
+      "title": "Tiramisu",
+      "foodType": ["Dessert"],
+      "code": "41007428",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.9,
+      "ratingCount": "420",
+      "description": "A classic Italian dessert made of layers of coffee-soaked ladyfingers and creamy mascarpone, topped with cocoa.",
+      "price": 7.99,
+      "imageUrl": ["https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&w=600"],
+      "__v": 0,
+      "category": "1"
     },
     {
-      food_id: 2,
-      restaurant_id: 1,
-      title: "Seafood Platter",
-      food_type: ["Lunch", "Main Course"],
-      price: 40.0,
-      ratings: 4.8,
+      "_id": "65316968f94c6496dc84f3c2",
+      "title": "Margarita Pizza",
+      "foodType": ["Main Course"],
+      "code": "41007429",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.8,
+      "ratingCount": "320",
+      "description": "Traditional Italian pizza with fresh tomatoes, mozzarella cheese, basil, and olive oil.",
+      "price": 12.99,
+      "imageUrl": ["https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600g"],
+      "__v": 0,
+      "category": "1"
     },
     {
-      food_id: 3,
-      restaurant_id: 1,
-      title: "Chocolate Cake",
-      food_type: ["Dessert"],
-      price: 10.0,
-      ratings: 4.9,
+      "_id": "65316968f94c6496dc84f3c3",
+      "title": "Cappuccino",
+      "foodType": ["Drink"],
+      "code": "41007430",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.7,
+      "ratingCount": "150",
+      "description": "Creamy coffee drink made with espresso and steamed milk, topped with milk foam.",
+      "price": 3.99,
+      "imageUrl": ["https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600g"],
+      "__v": 0,
+      "category": "2"
     },
-    // Add 3 items for each restaurant here...
+    {
+      "_id": "65316968f94c6496dc84f3c4",
+      "title": "Avocado Toast",
+      "foodType": ["Breakfast", "Vegan"],
+      "code": "41007431",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.6,
+      "ratingCount": "210",
+      "description": "Toasted bread topped with mashed avocado, olive oil, salt, and pepper.",
+      "price": 6.99,
+      "imageUrl": ["https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600g"],
+      "__v": 0,
+      "category": "3"
+    },
+    {
+      "_id": "65316968f94c6496dc84f3c5",
+      "title": "Nachos",
+      "foodType": ["Snack"],
+      "code": "41007432",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.5,
+      "ratingCount": "180",
+      "description": "Crispy tortilla chips topped with melted cheese, jalapenos, and salsa.",
+      "price": 5.99,
+      "imageUrl": ["https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600g"],
+      "__v": 0,
+      "category": "4"
+    },
+    {
+      "_id": "65316968f94c6496dc84f3c6",
+      "title": "Vegan Burger",
+      "foodType": ["Main Course", "Vegan"],
+      "code": "41007433",
+      "isAvailable": true,
+      "restaurant": "6530ea6bc9e72013e5b6592d",
+      "rating": 4.8,
+      "ratingCount": "250",
+      "description": "Delicious plant-based burger patty served with lettuce, tomato, and vegan mayo.",
+      "price": 10.99,
+      "imageUrl": ["https://example.com/vegan_burger.jpg"],
+      "__v": 0,
+      "category": "5"
+    }
   ];
   
   // Reviews
@@ -177,6 +242,6 @@ const categories = [
   ];
 
 
-  const data = { categories, choicesList, restaurants }; 
+  const data = { categories, choicesList, restaurants, menu }; 
   export { data };
   

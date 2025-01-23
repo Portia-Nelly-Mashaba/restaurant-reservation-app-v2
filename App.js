@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -11,9 +11,9 @@ import BottomTab from "./src/navigation/Bottomtab";
 import { COLORS } from "./src/constants/theme";
 import { UserLocationContext } from "./src/context/UserLocationContext";
 import { UserReservedGeoCode } from "./src/context/UserReservedGeoCode";
+import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -53,20 +53,18 @@ export default function App() {
   useEffect(() => {
     (async () => {
       setAddress(defaultAddress);
-      let {status} = await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      // console.log(location);
     })();
   }, []);
 
   if (!fontsLoaded) {
-    // Return a loading indicator or splash screen while fonts are loading or app is initializing
-    return null;
+    return null; // Show splash or loading screen
   }
 
   return (
@@ -77,16 +75,18 @@ export default function App() {
             <Stack.Navigator>
               <Stack.Screen
                 name="Reservation"
-                component={BottomTab} // Replace with your actual component
+                component={BottomTab}
                 options={{
-                  // headerShown: false, // Hide the header
-                  headerStyle: {
-                    backgroundColor: COLORS.offwhite, // Customize your header style
-                  },
-                  headerTitleStyle: {
-                    fontWeight: 'bold',
-                    color: COLORS.dark, // Customize your header title style
-                  },
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+              <Stack.Screen
+                name="Restaurant-Details"
+                component={RestaurantNavigator}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
                 }}
               />
             </Stack.Navigator>

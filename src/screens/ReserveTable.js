@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const RecommendationList = () => {
+const ReserveTable = () => {
   return (
     <View>
-      <Text>RecommendationList</Text>
+      <Text>ReserveTable</Text>
     </View>
   )
 }
 
-export default RecommendationList
+export default ReserveTable
