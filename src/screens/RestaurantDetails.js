@@ -1,11 +1,11 @@
-import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { data } from "../constants/data"; // Import your datasets
 import Buttons from "../components/Button";
 import { COLORS } from "../constants/theme";
 
 
-const RestaurantDetails = ({ route }) => {
+const RestaurantDetails = ({ route, navigation }) => {
   const { item } = route.params;
   const [activeTab, setActiveTab] = useState('About');
 
@@ -19,6 +19,7 @@ const RestaurantDetails = ({ route }) => {
   };
 
   return (
+    <>
     <ScrollView contentContainerStyle={styles.container}>
       {restaurant && (
         <>
@@ -30,7 +31,23 @@ const RestaurantDetails = ({ route }) => {
           />
           <Buttons onToggle={handleToggle} />
           {activeTab === 'About' && (
-            <Text style={styles.description}>{restaurant.description}</Text>
+            <>
+            <View style={[styles.aboutContainer, { backgroundColor: COLORS.white}]}>
+                <Text style={styles.aboutText}>Cuisine: {
+                data.categories.find(category => category._id === restaurant.category_id)?.name
+                }</Text>
+
+                <Text style={styles.aboutText}>Location: {restaurant.coords.address}</Text>
+                <Text style={styles.aboutText}>Hours of Operation: {restaurant.hours_of_operation}</Text>
+            </View>
+            <Text style={styles.title}>Restaurant Features</Text>
+            <View style={styles.featuresContainer}>
+                
+                {restaurant.features.map((feature, index) => (
+                    <Text key={index} style={styles.featureText}>{feature}</Text>
+                ))}
+            </View>
+            </>
           )}
           {activeTab === 'Menu' && (
             data.menu
@@ -55,6 +72,13 @@ const RestaurantDetails = ({ route }) => {
         </>
       )}
     </ScrollView>
+
+    <TouchableOpacity
+  style={styles.reserveButton}
+  onPress={() => navigation.navigate("reserve-table", { restaurant })}>
+  <Text style={styles.reserveButtonText}>Reserve Table</Text>
+</TouchableOpacity>
+    </>
   );
 };
 
@@ -83,6 +107,29 @@ const styles = StyleSheet.create({
     fontFamily: 'regular',
     color: COLORS.gray,
   },
+  aboutContainer: {
+    padding:16,
+    borderRadius: 8,
+    marginVertical: 16,
+  },
+  aboutText: {
+    fontSize:14,
+    marginBottom: 8,
+    fontFamily: 'regular',
+    color: COLORS.gray
+  },
+  featuresContainer: {
+    marginTop:16,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: COLORS.gray
+  },
+  featureText: {
+    fontSize:14,
+    marginBottom: 4,
+    fontFamily: 'regular',
+    color: COLORS.gray
+  },
   menuItem: {
     marginTop: 16,
   },
@@ -109,4 +156,20 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontFamily: 'regular',
   },
+  reserveButton: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16, 
+    backgroundColor: COLORS.dark,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center'
+  },
+  reserveButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'regular'
+  }
 });
