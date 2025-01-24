@@ -1,17 +1,19 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useContext, useState } from "react";
 import { COLORS, SIZES } from "../constants/theme";
 // import fetchProfile from "../hooks/fetchProfile";
 import { LoginContext } from "../context/LoginContext";
+import data from '../constants/data'
 
 import { AntDesign } from "@expo/vector-icons";
 
-// import NetworkImage from "../components/NetworkImage";
-// import ProfileTile from "../components/ProfileTile";
-// import RegistrationTile from "../components/RegistrationTile";
+import NetworkImage from "../components/NetworkImage";
+import ProfileTile from "../components/ProfileImage";
+import RegistrationTile from "../components/RegistrationTile";
 
 const Profile = () => {
   const [user, setUser] = useState(null)
+  const {login, setLogin} = useContext(LoginContext)
 
   // const { user, isProfileLoading, error, refetch } = fetchProfile();
   const profile =
@@ -22,7 +24,7 @@ const Profile = () => {
   //   return <LoadingScreen />;
   // }
   return (
-    <View>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={{ backgroundColor: COLORS.primary, height: SIZES.height }}>
         <View
           style={{
@@ -47,18 +49,18 @@ const Profile = () => {
                 flexDirection: "row",
               }}
             >
-              {/* <NetworkImage
-                source={user === null ? profile : user.profile}
+              <NetworkImage
+                data={user === null ? profile : user.profile}
                 width={45}
                 height={45}
                 radius={99}
-              /> */}
+              />
               <View style={{ marginLeft: 10, marginTop: 3 }}>
                 <Text style={styles.text}>
-                  {user === null ? "username" : user.username}
+                  {user === null ? "Portia M" : user.username}
                 </Text>
                 <Text style={styles.email}>
-                  {user === null ? "email" : user.email}
+                  {user === null ? "pnpnelly@gmail.com" : user.email}
                 </Text>
               </View>
             </View>
@@ -69,12 +71,12 @@ const Profile = () => {
             
           </View>
 
-          {/* <RegistrationTile
+          <RegistrationTile
             heading={"Register a restaurant"}
             desc={
               "Join our community and showcase your culinary delights to a wider audience."
             }
-          /> */}
+          />
 
           <View
             style={{
@@ -84,9 +86,9 @@ const Profile = () => {
               borderRadius: 12,
             }}
           >
-            {/* <ProfileTile title={"Orders"} icon={"fast-food-outline"} font={1} />
+            <ProfileTile title={"Reservations"} icon={"calender"} font={1} />
             <ProfileTile title={"Places"} icon={"heart"} font={2} />
-            <ProfileTile title={"Payment History"} icon={"creditcard"} /> */}
+            <ProfileTile title={"Payment History"} icon={"creditcard"} />
           </View>
 
           <View
@@ -97,17 +99,10 @@ const Profile = () => {
               borderRadius: 12,
             }}
           >
-            {/* <ProfileTile title={"Coupons"} icon={"tago"} />
+            <ProfileTile title={"Coupons"} icon={"tago"} />
             <ProfileTile title={"My Store"} icon={"bag"} font={2} />
-            <ProfileTile title={"History"} icon={"globe-outline"} font={1} /> */}
+            <ProfileTile title={"History"} icon={"globe-outline"} font={1} />
           </View>
-
-          {/* <RegistrationTile
-            heading={"Join the courier team"}
-            desc={
-              "Embark on a journey, deliver joy, and earn on your own schedule."
-            }
-          /> */}
 
           <View
             style={{
@@ -117,23 +112,27 @@ const Profile = () => {
               borderRadius: 12,
             }}
           >
-            {/* <ProfileTile
-              title={"Shipping Address"}
+            <ProfileTile
+              title={"My Address"}
               icon={"location-outline"}
               font={1}
             />
             <ProfileTile title={"Services Center"} icon={"customerservice"} />
-            <ProfileTile title={"Settings"} icon={"setting"} /> */}
+            <ProfileTile title={"Settings"} icon={"setting"} />
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default Profile;
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 20, // Adjust this value to reduce the padding on top
+  },
   text: {
     marginLeft: 10,
     fontFamily: "medium",
@@ -149,6 +148,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
-    marginTop: 60,
+    marginTop: 20, // Adjust this value to reduce the padding on top
   },
 });

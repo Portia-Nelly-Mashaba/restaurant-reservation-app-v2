@@ -12,6 +12,8 @@ import { COLORS } from "./src/constants/theme";
 import { UserLocationContext } from "./src/context/UserLocationContext";
 import { UserReservedGeoCode } from "./src/context/UserReservedGeoCode";
 import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LoginContext } from "./src/context/LoginContext";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -19,6 +21,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
+  const [login, setLogin] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
 
   const defaultAddress = {
@@ -60,6 +63,7 @@ export default function App() {
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      loginStatus();
     })();
   }, []);
 
@@ -67,9 +71,22 @@ export default function App() {
     return null; // Show splash or loading screen
   }
 
+  const loginStatus = async () => {
+    const userToken = await AsyncStorage.getItem('token')
+
+    if(userToken !==null){
+      setLogin(true)
+    }else{
+      setLogin(false)
+    }
+    console.log(login);
+    
+  };
+
   return (
     <UserLocationContext.Provider value={{ location, setLocation }}>
       <UserReservedGeoCode.Provider value={{ address, setAddress }}>
+      <LoginContext.Provider value={{ login, setLogin }}>
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationContainer>
             <Stack.Navigator>
@@ -92,6 +109,7 @@ export default function App() {
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>
+        </LoginContext.Provider>
       </UserReservedGeoCode.Provider>
     </UserLocationContext.Provider>
   );
