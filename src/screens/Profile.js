@@ -86,7 +86,7 @@ const Profile = () => {
               borderRadius: 12,
             }}
           >
-            <ProfileTile title={"Reservations"} icon={"calender"} font={1} />
+            <ProfileTile title={"Reservations"} icon={"fast-food-outline"} font={1} />
             <ProfileTile title={"Places"} icon={"heart"} font={2} />
             <ProfileTile title={"Payment History"} icon={"creditcard"} />
           </View>

@@ -14,6 +14,7 @@ import { UserReservedGeoCode } from "./src/context/UserReservedGeoCode";
 import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "./src/context/LoginContext";
+import SignUp from "./src/screens/SignUp";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -101,6 +102,14 @@ export default function App() {
               <Stack.Screen
                 name="Restaurant-Details"
                 component={RestaurantNavigator}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+              <Stack.Screen
+                name="Sign-Up"
+                component={SignUp}
                 options={{
                   headerStyle: { backgroundColor: COLORS.offwhite },
                   headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
