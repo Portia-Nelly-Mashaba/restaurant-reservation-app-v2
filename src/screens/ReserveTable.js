@@ -8,21 +8,26 @@ import {
   Alert,
 } from "react-native";
 import { COLORS } from "../constants/theme";
+
 const ReserveTable = ({ route, navigation }) => {
   const { restaurant } = route.params;
-  // State for toggling sections
+
   const [activeTab, setActiveTab] = useState("Date");
-  // Reservation state
-  const [selectedDate, setSelectedDate] = useState(""); // Example: "2025-01-23"
+  const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [adultGuests, setAdultGuests] = useState(0);
   const [kidsGuests, setKidsGuests] = useState(0);
   const [additionalInfo, setAdditionalInfo] = useState("");
+
   const handleNext = () => {
     if (!selectedDate || !selectedTime || adultGuests <= 0) {
       Alert.alert("Error", "Please complete the reservation details.");
       return;
     }
+
+    const totalGuests = adultGuests + kidsGuests;
+    const totalAmount = restaurant.average_price * totalGuests;
+
     const reservationData = {
       reservation_id: Math.random().toString(36).substring(2, 10),
       restaurant_id: restaurant.id,
@@ -30,18 +35,13 @@ const ReserveTable = ({ route, navigation }) => {
       time: selectedTime,
       guests: { adult_no: adultGuests, kids_no: kidsGuests },
       additionalInfo,
+      totalAmount,
     };
-    Alert.alert(
-      "Success",
-      "Reservation saved successfully!",
-      [
-        {
-          text: "OK",
-          onPress: () => navigation.goBack(),
-        },
-      ]
-    );
-    console.log("Reservation Data:", reservationData);
+
+    navigation.navigate("reservation-summary", {
+      reservationData,
+      restaurant,
+    });
   };
   const renderDatePicker = () => (
     <View style={styles.dateContainer}>

@@ -4,6 +4,7 @@ import React from "react";
 import RestaurantDetails from "../screens/RestaurantDetails";
 import ReserveTable from "../screens/ReserveTable";
 import ReservationPage from "../screens/ReservetionPage";
+import ReservationSummary from "../screens/ReservationSummary";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,13 @@ const RestaurantNavigator = () => {
       <Stack.Screen
         name="reserve-table"
         component={ReserveTable}
+        options={{ headerShown: false }}
+        initialParams={{ item }}
+      />
+
+      <Stack.Screen
+        name="reservation-summary"
+        component={ReservationSummary}
         options={{ headerShown: false }}
         initialParams={{ item }}
       />

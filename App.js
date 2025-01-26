@@ -15,6 +15,7 @@ import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "./src/context/LoginContext";
 import SignUp from "./src/screens/SignUp";
+import Login from "./src/screens/Login";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -110,6 +111,14 @@ export default function App() {
               <Stack.Screen
                 name="Sign-Up"
                 component={SignUp}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+                />
+                <Stack.Screen
+                name="Login"
+                component={Login}
                 options={{
                   headerStyle: { backgroundColor: COLORS.offwhite },
                   headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
