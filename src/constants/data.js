@@ -222,7 +222,7 @@ const categories = [
   const profiles = [
     {
       user_id: 1001,
-      username: "Foodie123",
+      fullName: "Foodie123",
       email: "foodie123@example.com",
       uid: "UID001",
       address: ["123 Main Street, NY"],
@@ -232,7 +232,7 @@ const categories = [
     },
     {
       user_id: 1002,
-      username: "Traveler42",
+      fullName: "Traveler42",
       email: "traveler42@example.com",
       uid: "UID002",
       address: ["456 Elm Street, LA"],

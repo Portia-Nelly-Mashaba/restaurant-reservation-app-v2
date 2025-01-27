@@ -86,7 +86,7 @@ const Profile = () => {
         />
 
         {/* Settings */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("EditProfile")}>
           <AntDesign name="setting" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Settings</Text>
         </TouchableOpacity>
