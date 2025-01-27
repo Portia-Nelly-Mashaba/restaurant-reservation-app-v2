@@ -31,6 +31,7 @@ const categories = [
       owner_id: 101,
       features: ["Kids Room", "Live Music"],
       ratings: 3,
+      isFavorite: true,
       coords: {
         coords_id: 1,
         latitude: 40.7128,
@@ -51,6 +52,7 @@ const categories = [
       owner_id: 102,
       features: ["Kids Room"],
       ratings: 4.3,
+      isFavorite: true,
       coords: {
         coords_id: 2,
         latitude: 34.0522,
@@ -225,7 +227,7 @@ const categories = [
       uid: "UID001",
       address: ["123 Main Street, NY"],
       userType: "Admin",
-      profile_img: "/images/foodie123.jpg",
+      profile_img: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       updatedAt: "2025-01-20",
     },
     {
@@ -235,7 +237,7 @@ const categories = [
       uid: "UID002",
       address: ["456 Elm Street, LA"],
       userType: "Vendor",
-      profile_img: "/images/traveler42.jpg",
+      profile_img: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       updatedAt: "2025-01-19",
     },
     // Add more user profiles here...

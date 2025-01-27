@@ -81,7 +81,8 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={login ? Profile: Login}
+          // component={login ? Profile: Login}
+          component={Profile}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons

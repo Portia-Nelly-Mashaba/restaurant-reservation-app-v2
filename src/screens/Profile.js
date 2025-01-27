@@ -1,153 +1,208 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
-import React, { useContext, useState } from "react";
-import { COLORS, SIZES } from "../constants/theme";
-// import fetchProfile from "../hooks/fetchProfile";
-import { LoginContext } from "../context/LoginContext";
-import data from '../constants/data'
-
-import { AntDesign } from "@expo/vector-icons";
-
-import NetworkImage from "../components/NetworkImage";
-import ProfileTile from "../components/ProfileImage";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  Pressable,
+} from "react-native";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { COLORS, SIZES } from "../constants/theme"; // Assuming these constants are defined in your project
 import RegistrationTile from "../components/RegistrationTile";
+import { useNavigation } from "@react-navigation/native";
+
+// Mock user data
+const profiles = [
+  {
+    user_id: 1001,
+    username: "Foodie123",
+    email: "foodie123@example.com",
+    uid: "UID001",
+    address: ["123 Main Street, NY"],
+    userType: "Admin",
+    profile_img:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    updatedAt: "2025-01-20",
+  },
+];
 
 const Profile = () => {
-  const [user, setUser] = useState(null)
-  const {login, setLogin} = useContext(LoginContext)
+  const navigation = useNavigation();
+  const [addressVisible, setAddressVisible] = useState(false);
 
-  // const { user, isProfileLoading, error, refetch } = fetchProfile();
-  const profile =
-    "https://d326fntlu7tb1e.cloudfront.net/uploads/b5065bb8-4c6b-4eac-a0ce-86ab0f597b1e-vinci_04.jpg";
-  const bkImg =
-    "https://d326fntlu7tb1e.cloudfront.net/uploads/ab6356de-429c-45a1-b403-d16f7c20a0bc-bkImg-min.png";
-  // if (isProfileLoading) {
-  //   return <LoadingScreen />;
-  // }
+  // User data (mock for now)
+  const user = profiles[0];
+
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={{ backgroundColor: COLORS.primary, height: SIZES.height }}>
-        <View
-          style={{
-            backgroundColor: COLORS.offwhite,
-            height: SIZES.height - 80,
-            borderBottomEndRadius: 30,
-            borderBottomStartRadius: 30,
-          }}
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
+      {/* Profile Header */}
+      <View style={styles.profileHeader}>
+        <Image
+          source={{ uri: user.profile_img }}
+          style={styles.profileImage}
+        />
+        <Text style={styles.username}>{user.username}</Text>
+        <Text style={styles.email}>{user.email}</Text>
+      </View>
+
+      {/* Buttons Section */}
+      <View style={styles.optionsContainer}>
+        {/* Address Button */}
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => setAddressVisible(true)}
         >
-          <Image
-            source={{ uri: bkImg }}
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                opacity: 0.7,
-              },
-            ]}
-          />
-          <View style={styles.profile}>
-            <View
-              style={{
-                flexDirection: "row",
-              }}
+          <MaterialIcons name="location-on" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Address</Text>
+        </TouchableOpacity>
+
+        {/* Reservations */}
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("Reservations")}>
+          <AntDesign name="calendar" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Reservations</Text>
+        </TouchableOpacity>
+
+        {/* Favorites */}
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("Favorites")}>
+          <AntDesign name="heart" size={24} color={COLORS.primary}  />
+          <Text style={styles.optionText} >Favorites</Text>
+        </TouchableOpacity>
+
+        {/* AdminPanel */}
+        <TouchableOpacity style={styles.optionButton}>
+          <MaterialIcons name="admin-panel-settings" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Admin Panel</Text>
+        </TouchableOpacity>
+
+        {/* Registration Tile */}
+        <RegistrationTile
+          heading={"Register a restaurant"}
+          desc={
+            "Join our community and showcase your culinary delights to a wider audience."
+          }
+        />
+
+        {/* Settings */}
+        <TouchableOpacity style={styles.optionButton}>
+          <AntDesign name="setting" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Settings</Text>
+        </TouchableOpacity>
+
+        {/* Logout */}
+        <TouchableOpacity style={[styles.optionButton, styles.logoutButton]}>
+          <AntDesign name="logout" size={24} color="red" />
+          <Text style={[styles.optionText, { color: "red" }]}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Address Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={addressVisible}
+        onRequestClose={() => setAddressVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalHeading}>User Address</Text>
+            <Text style={styles.modalText}>{user.address[0]}</Text>
+            <Pressable
+              style={styles.closeButton}
+              onPress={() => setAddressVisible(false)}
             >
-              <NetworkImage
-                data={user === null ? profile : user.profile}
-                width={45}
-                height={45}
-                radius={99}
-              />
-              <View style={{ marginLeft: 10, marginTop: 3 }}>
-                <Text style={styles.text}>
-                  {user === null ? "Portia M" : user.username}
-                </Text>
-                <Text style={styles.email}>
-                  {user === null ? "pnpnelly@gmail.com" : user.email}
-                </Text>
-              </View>
-            </View>
-
-            <TouchableOpacity>
-              <AntDesign name="logout" size={24} color="red" />
-            </TouchableOpacity>
-            
-          </View>
-
-          <RegistrationTile
-            heading={"Register a restaurant"}
-            desc={
-              "Join our community and showcase your culinary delights to a wider audience."
-            }
-          />
-
-          <View
-            style={{
-              height: 140,
-              backgroundColor: COLORS.lightWhite,
-              margin: 10,
-              borderRadius: 12,
-            }}
-          >
-            <ProfileTile title={"Reservations"} icon={"fast-food-outline"} font={1} />
-            <ProfileTile title={"Places"} icon={"heart"} font={2} />
-            <ProfileTile title={"Payment History"} icon={"creditcard"} />
-          </View>
-
-          <View
-            style={{
-              height: 140,
-              backgroundColor: COLORS.lightWhite,
-              margin: 10,
-              borderRadius: 12,
-            }}
-          >
-            <ProfileTile title={"Coupons"} icon={"tago"} />
-            <ProfileTile title={"My Store"} icon={"bag"} font={2} />
-            <ProfileTile title={"History"} icon={"globe-outline"} font={1} />
-          </View>
-
-          <View
-            style={{
-              height: 140,
-              backgroundColor: COLORS.lightWhite,
-              margin: 10,
-              borderRadius: 12,
-            }}
-          >
-            <ProfileTile
-              title={"My Address"}
-              icon={"location-outline"}
-              font={1}
-            />
-            <ProfileTile title={"Services Center"} icon={"customerservice"} />
-            <ProfileTile title={"Settings"} icon={"setting"} />
+              <Text style={styles.closeButtonText}>Close</Text>
+            </Pressable>
           </View>
         </View>
-      </View>
+      </Modal>
     </ScrollView>
   );
 };
 
-export default Profile;
-
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-    paddingTop: 20, // Adjust this value to reduce the padding on top
+  container: {
+    padding: 16,
+    backgroundColor: COLORS.background,
   },
-  text: {
-    marginLeft: 10,
-    fontFamily: "medium",
-    color: COLORS.black,
+  profileHeader: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  username: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: COLORS.text,
   },
   email: {
-    marginLeft: 10,
-    fontFamily: "regular",
-    color: COLORS.gray,
+    fontSize: 14,
+    color: COLORS.textSecondary,
   },
-  profile: {
+  optionsContainer: {
+    marginVertical: 20,
+  },
+  optionButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginHorizontal: 20,
-    marginTop: 20, // Adjust this value to reduce the padding on top
+    padding: 12,
+    marginBottom: 10,
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  optionText: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: COLORS.text,
+  },
+  logoutButton: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalHeading: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    color: COLORS.text,
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: COLORS.white,
+    fontSize: 16,
   },
 });
+
+export default Profile;
