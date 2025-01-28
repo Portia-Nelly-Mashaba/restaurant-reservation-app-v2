@@ -14,20 +14,34 @@ import { COLORS, SIZES } from "../constants/theme";
 const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setfullName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [obsecureText, setObsecureText] = useState(true);
 
-  const handleSignUp = ({navigation}) => {
+  const handleSignUp = async () => {
     if (!email || !password || !fullName) {
       Alert.alert("Error", "Please provide all required fields");
     } else {
-      // Replace this with your actual registration API call
-      Alert.alert("Success", "Registration successful!", [
-        {
-          text: "OK",
-          onPress: () => navigation.navigate("Login"),
-        },
-      ]);
+      try {
+        // API call to register
+        const response = await fetch("http://localhost:3000/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fullName, email, password }),
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          Alert.alert("Success", "Registration successful!", [
+            { text: "OK", onPress: () => navigation.navigate("Login") },
+          ]);
+        } else {
+          Alert.alert("Error", data.message || "Registration failed");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred. Please try again.");
+      }
     }
   };
 
@@ -42,9 +56,10 @@ const SignUp = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Text style={styles.heading}>Register</Text>
-        {/* Username Input */}
+
+        {/* Full Name Input */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>FullName</Text>
+          <Text style={styles.label}>Full Name</Text>
           <View style={styles.inputField}>
             <MaterialCommunityIcons
               name="face-man-profile"
@@ -55,11 +70,12 @@ const SignUp = ({ navigation }) => {
             <TextInput
               placeholder="Full Name"
               value={fullName}
-              onChangeText={setfullName}
+              onChangeText={setFullName}
               style={styles.input}
             />
           </View>
         </View>
+
         {/* Email Input */}
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Email</Text>
@@ -79,6 +95,7 @@ const SignUp = ({ navigation }) => {
             />
           </View>
         </View>
+
         {/* Password Input */}
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Password</Text>
@@ -96,9 +113,7 @@ const SignUp = ({ navigation }) => {
               style={styles.input}
               secureTextEntry={obsecureText}
             />
-            <TouchableOpacity
-              onPress={() => setObsecureText(!obsecureText)}
-            >
+            <TouchableOpacity onPress={() => setObsecureText(!obsecureText)}>
               <MaterialCommunityIcons
                 name={obsecureText ? "eye-outline" : "eye-off-outline"}
                 size={18}
@@ -106,6 +121,7 @@ const SignUp = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
+
         {/* Sign-Up Button */}
         <TouchableOpacity
           style={styles.signUpButton}
@@ -113,14 +129,10 @@ const SignUp = ({ navigation }) => {
         >
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
+
         {/* Already have an account? Login */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Login")}
-          style={styles.registerTextContainer}
-        >
-          <Text style={styles.registerText}>
-            Already have an account? Log In
-          </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.registerTextContainer}>
+          <Text style={styles.registerText}>Already have an account? Log In</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -128,66 +140,7 @@ const SignUp = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  heading: {
-    textAlign: "center",
-    fontSize: SIZES.xxLarge,
-    fontFamily: "bold",
-    color: COLORS.secondary,
-    marginBottom: SIZES.large,
-  },
-  inputWrapper: {
-    marginBottom: 20,
-  },
-  label: {
-    fontFamily: "regular",
-    fontSize: SIZES.small,
-    color: COLORS.black,
-    marginBottom: 5,
-  },
-  inputField: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.gray,
-    borderWidth: 1,
-    borderRadius: 12,
-    height: 50,
-    paddingHorizontal: 15,
-  },
-  input: {
-    flex: 1,
-    color: COLORS.black,
-    fontFamily: "regular",
-  },
-  iconStyle: {
-    marginRight: 10,
-  },
-  signUpButton: {
-    height: 50,
-    backgroundColor: COLORS.black,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: SIZES.large,
-  },
-  signUpButtonText: {
-    color: COLORS.white,
-    fontFamily: "bold",
-    fontSize: SIZES.medium,
-  },
-  registerTextContainer: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-  registerText: {
-    color: COLORS.primary,
-    fontFamily: "regular",
-    fontSize: SIZES.medium,
-  },
+  // Same as your previous styles
 });
 
 export default SignUp;

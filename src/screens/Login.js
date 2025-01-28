@@ -9,18 +9,37 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants/theme"; // Ensure these are defined in your project
+import { COLORS, SIZES } from "../constants/theme";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [obsecureText, setObsecureText] = useState(true);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please add email or password");
     } else {
-      Alert.alert("Success","Login Successfully");
-      navigation.navigate("Reservation");
+      try {
+        // API call to login
+        const response = await fetch("http://localhost:3000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          Alert.alert("Success", "Login Successful");
+          navigation.navigate("Reservation"); // Replace "Reservation" with your desired screen
+        } else {
+          Alert.alert("Error", data.message || "Login failed");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred. Please try again.");
+      }
     }
   };
 
@@ -34,8 +53,8 @@ const Login = ({ navigation }) => {
       }}
     >
       <View style={styles.container}>
-        {/* Heading */}
         <Text style={styles.heading}>Let's Explore</Text>
+
         {/* Email Input */}
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Email</Text>
@@ -47,13 +66,12 @@ const Login = ({ navigation }) => {
               placeholderTextColor={COLORS.gray}
               keyboardType="email-address"
               autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect={false}
               value={email}
               onChangeText={setEmail}
             />
           </View>
         </View>
+
         {/* Password Input */}
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Password</Text>
@@ -63,12 +81,16 @@ const Login = ({ navigation }) => {
               style={styles.input}
               placeholder="Enter your password"
               placeholderTextColor={COLORS.gray}
-              secureTextEntry={true}
+              secureTextEntry={obsecureText}
               value={password}
               onChangeText={setPassword}
             />
+            <TouchableOpacity onPress={() => setObsecureText(!obsecureText)}>
+              <AntDesign name={obsecureText ? "eye" : "eyeo"} size={18} color={COLORS.gray} />
+            </TouchableOpacity>
           </View>
         </View>
+
         {/* Login Button */}
         <TouchableOpacity
           style={styles.loginButton}
@@ -76,18 +98,15 @@ const Login = ({ navigation }) => {
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
+
         {/* Register Link */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Sign-Up")} // Navigate to SignUp.js
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("Sign-Up")}>
           <Text style={styles.registerText}>Don't have an account? Register</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -149,3 +168,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+export default Login;
