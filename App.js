@@ -92,48 +92,49 @@ export default function App() {
       <LoginContext.Provider value={{ login, setLogin }}>
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Reservation"
-                component={BottomTab}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="Restaurant-Details"
-                component={RestaurantNavigator}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="Sign-Up"
-                component={SignUp}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-                />
-                <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="EditProfile"
-                component={EditProfile}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-            </Stack.Navigator>
+          <Stack.Navigator>
+  <Stack.Screen
+    name="Reservation"
+    component={BottomTab}
+    options={{
+      headerStyle: { backgroundColor: COLORS.offwhite },
+      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+    }}
+  />
+  <Stack.Screen
+    name="Restaurant-Details"
+    component={RestaurantNavigator}
+    options={{
+      headerStyle: { backgroundColor: COLORS.offwhite },
+      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+    }}
+  />
+  <Stack.Screen
+    name="Sign-Up"  // Ensure this name matches what you're using to navigate
+    component={SignUp}
+    options={{
+      headerStyle: { backgroundColor: COLORS.offwhite },
+      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+    }}
+  />
+  <Stack.Screen
+    name="Login"
+    component={Login}
+    options={{
+      headerStyle: { backgroundColor: COLORS.offwhite },
+      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+    }}
+  />
+  <Stack.Screen
+    name="EditProfile"
+    component={EditProfile}
+    options={{
+      headerStyle: { backgroundColor: COLORS.offwhite },
+      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+    }}
+  />
+</Stack.Navigator>
+
           </NavigationContainer>
         </SafeAreaView>
         </LoginContext.Provider>

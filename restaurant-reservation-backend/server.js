@@ -4,7 +4,9 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config(); 
+
+
 
 const app = express();
 app.use(express.json()); // Parse incoming JSON requests
@@ -15,6 +17,7 @@ app.use(morgan("dev")); // Log requests to the console for debugging
 const reservationRoutes = require("./routes/reservationRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const authRoutes = require("./routes/authRoutes");
+
 
 // Use Routes
 app.use("/api/reservations", reservationRoutes);
@@ -39,9 +42,11 @@ const connectToDatabase = async () => {
 
     // Start the server after successful connection
     const port = process.env.PORT || 3000; // Use the port from .env, default to 3000
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`Server running on http://192.168.1.31:${port}`);
     });
+    
+    
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     process.exit(1); // Stop the application if there's an error with the database connection

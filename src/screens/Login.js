@@ -1,73 +1,112 @@
+import React, { useState } from "react";
 import {
-  StyleSheet,
+  ScrollView,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  ScrollView,
+  TextInput,
   Alert,
+  StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [obsecureText, setObsecureText] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password) => {
+    const minLength = 6;
+    const regex = /^(?=.*\d)/; // At least one number
+    return password.length >= minLength && regex.test(password);
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please add email or password");
-    } else {
-      try {
-        // API call to login
-        const response = await fetch("http://localhost:3000/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
+      Alert.alert("Error", "Please enter both email and password");
+      return;
+    }
+  
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+  
+    if (!validatePassword(password)) {
+      Alert.alert("Error", "Password must be at least 6 characters long and contain at least one number");
+      return;
+    }
+  
+    setIsLoading(true);
+  
+    try {
+      const response = await fetch("http://192.168.1.31:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      console.log("Email:", email, "Password:", password);
 
-        if (data.success) {
-          Alert.alert("Success", "Login Successful");
-          navigation.navigate("Reservation"); // Replace "Reservation" with your desired screen
-        } else {
-          Alert.alert("Error", data.message || "Login failed");
-        }
-      } catch (error) {
-        Alert.alert("Error", "An error occurred. Please try again.");
+  
+      const data = await response.json();
+      console.log("Response Data:", data);  // Log the server's response for debugging
+  
+      if (response.ok) {
+        await AsyncStorage.setItem("userToken", data.token); // Store the token
+        console.log("Stored Token:", await AsyncStorage.getItem("userToken")); // Log token after storage
+
+        Alert.alert("Success", data.message, [
+          {
+            text: "OK",
+            onPress: () => {
+              console.log("Navigating to Home...");
+              navigation.navigate("Home");
+            },
+          },
+        ]);
+      } else {
+        Alert.alert("Error", data.message || "Login failed");
       }
+    } catch (error) {
+      console.error("Login error:", error);  // Log the error to help debug
+      Alert.alert("Error", "An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        backgroundColor: COLORS.white,
-        justifyContent: "center",
-        paddingHorizontal: 20,
-      }}
-    >
-      <View style={styles.container}>
-        <Text style={styles.heading}>Let's Explore</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.heading}>Login</Text>
 
         {/* Email Input */}
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Email</Text>
           <View style={styles.inputField}>
-            <AntDesign name="mail" size={20} color={COLORS.gray} style={styles.iconStyle} />
+            <MaterialCommunityIcons
+              name="email-outline"
+              size={20}
+              color={COLORS.gray}
+              style={styles.iconStyle}
+            />
             <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              placeholderTextColor={COLORS.gray}
-              keyboardType="email-address"
-              autoCapitalize="none"
+              placeholder="Enter email"
               value={email}
               onChangeText={setEmail}
+              style={styles.input}
+              keyboardType="email-address"
             />
           </View>
         </View>
@@ -76,32 +115,42 @@ const Login = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Password</Text>
           <View style={styles.inputField}>
-            <AntDesign name="lock" size={20} color={COLORS.gray} style={styles.iconStyle} />
+            <MaterialCommunityIcons
+              name="lock-outline"
+              size={20}
+              color={COLORS.gray}
+              style={styles.iconStyle}
+            />
             <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              placeholderTextColor={COLORS.gray}
-              secureTextEntry={obsecureText}
+              placeholder="Password"
               value={password}
               onChangeText={setPassword}
+              style={styles.input}
+              secureTextEntry={obsecureText}
             />
             <TouchableOpacity onPress={() => setObsecureText(!obsecureText)}>
-              <AntDesign name={obsecureText ? "eye" : "eyeo"} size={18} color={COLORS.gray} />
+              <MaterialCommunityIcons
+                name={obsecureText ? "eye-outline" : "eye-off-outline"}
+                size={18}
+              />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Login Button */}
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleLogin}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
+          {isLoading ? (
+            <ActivityIndicator size="small" color={COLORS.white} />
+          ) : (
+            <Text style={styles.loginButtonText}>Login</Text>
+          )}
         </TouchableOpacity>
 
-        {/* Register Link */}
+        {/* Go to SignUp */}
         <TouchableOpacity onPress={() => navigation.navigate("Sign-Up")}>
-          <Text style={styles.registerText}>Don't have an account? Register</Text>
+          <Text style={styles.registerText}>
+            Don't have an account? Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -110,6 +159,12 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    backgroundColor: COLORS.white,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  innerContainer: {
     flex: 1,
     justifyContent: "center",
   },
@@ -162,9 +217,9 @@ const styles = StyleSheet.create({
   },
   registerText: {
     textAlign: "center",
-    fontSize: SIZES.medium,
-    fontFamily: "regular",
     color: COLORS.primary,
+    fontFamily: "regular",
+    fontSize: SIZES.medium,
     marginTop: 10,
   },
 });
