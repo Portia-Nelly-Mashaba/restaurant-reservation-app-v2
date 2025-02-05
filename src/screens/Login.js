@@ -1,54 +1,48 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  TextInput, 
+  TouchableOpacity, 
+  ScrollView, 
+  Alert 
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants/theme"; // Ensure these are defined in your project
+import { COLORS, SIZES } from "../constants/theme";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";  
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
+import { CommonActions } from "@react-navigation/native"; 
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
+});
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // const handleLogin = () => {
-  //   if (!email || !password) {
-  //     Alert.alert("Error", "Please add email or password");
-  //   } else {
-  //     Alert.alert("Success","Login Successfully");
-  //     navigation.navigate("Reservation");
-  //   }
-  // };
-
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please add email or password");
-      return;
-    }
-  
+  const handleLogin = async (values) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/user/login", {
-        email,
-        password,
-      });
+      const response = await axios.post("http://192.168.147.93:8080/api/user/login", values);
   
       if (response.data.success) {
+        await AsyncStorage.setItem("loggedInUser", JSON.stringify(response.data.user));
         Alert.alert("Success", "Login Successfully");
-        navigation.navigate("Reservation");
+
+       // Use navigation.replace instead of CommonActions.reset
+       navigation.replace("Reservation");
       } else {
         Alert.alert("Error", response.data.message);
       }
     } catch (error) {
       console.error("Login Error:", error);
-      Alert.alert("Error", "Invalid credentials or server issue");
+      Alert.alert("Error", error.response?.data?.message || "Server issue");
     }
   };
   
-
   return (
     <ScrollView
       contentContainerStyle={{
@@ -59,53 +53,91 @@ const Login = ({ navigation }) => {
       }}
     >
       <View style={styles.container}>
-        {/* Heading */}
         <Text style={styles.heading}>Let's Explore</Text>
-        {/* Email Input */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Email</Text>
-          <View style={styles.inputField}>
-            <AntDesign name="mail" size={20} color={COLORS.gray} style={styles.iconStyle} />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              placeholderTextColor={COLORS.gray}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect={false}
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-        </View>
-        {/* Password Input */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Password</Text>
-          <View style={styles.inputField}>
-            <AntDesign name="lock" size={20} color={COLORS.gray} style={styles.iconStyle} />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              placeholderTextColor={COLORS.gray}
-              secureTextEntry={true}
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-        </View>
-        {/* Login Button */}
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleLogin}
+
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleLogin}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              {/* Email Input */}
+              <View style={styles.inputWrapper}>
+                <Text style={styles.label}>Email</Text>
+                <View style={styles.inputField}>
+                  <AntDesign
+                    name="mail"
+                    size={20}
+                    color={COLORS.gray}
+                    style={styles.iconStyle}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    placeholderTextColor={COLORS.gray}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    autoCorrect={false}
+                    value={values.email}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                  />
+                </View>
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.inputWrapper}>
+                <Text style={styles.label}>Password</Text>
+                <View style={styles.inputField}>
+                  <AntDesign
+                    name="lock"
+                    size={20}
+                    color={COLORS.gray}
+                    style={styles.iconStyle}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    placeholderTextColor={COLORS.gray}
+                    secureTextEntry={true}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                  />
+                </View>
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+              </View>
+
+              {/* Login Button */}
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.loginButtonText}>Login</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </Formik>
+
         {/* Register Link */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Sign-Up")} // Navigate to SignUp.js
-        >
-          <Text style={styles.registerText}>Don't have an account? Register</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Sign-Up")}>
+          <Text style={styles.registerText}>
+            Don't have an account? Register
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -115,10 +147,7 @@ const Login = ({ navigation }) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
+  container: { flex: 1, justifyContent: "center" },
   heading: {
     textAlign: "center",
     fontSize: SIZES.xxLarge,
@@ -126,9 +155,7 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     marginBottom: SIZES.large,
   },
-  inputWrapper: {
-    marginBottom: 20,
-  },
+  inputWrapper: { marginBottom: 20 },
   label: {
     fontFamily: "regular",
     fontSize: SIZES.small,
@@ -145,14 +172,9 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 15,
   },
-  input: {
-    flex: 1,
-    color: COLORS.black,
-    fontFamily: "regular",
-  },
-  iconStyle: {
-    marginRight: 10,
-  },
+  input: { flex: 1, color: COLORS.black, fontFamily: "regular" },
+  iconStyle: { marginRight: 10 },
+  errorText: { color: "red", fontSize: SIZES.small, marginTop: 2 },
   loginButton: {
     height: 50,
     backgroundColor: COLORS.black,

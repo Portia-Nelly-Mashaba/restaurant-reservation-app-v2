@@ -11,7 +11,6 @@ import BottomTab from "./src/navigation/Bottomtab";
 import { COLORS } from "./src/constants/theme";
 import { UserLocationContext } from "./src/context/UserLocationContext";
 import { UserReservedGeoCode } from "./src/context/UserReservedGeoCode";
-import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "./src/context/LoginContext";
 import SignUp from "./src/screens/SignUp";
@@ -19,6 +18,7 @@ import Login from "./src/screens/Login";
 import EditProfile from "./src/screens/EditProfile";
 import Dashboard from "./src/Admin/Dashboard";
 import SuperAdmin from "./src/Admin/SuperAdmin";
+import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -72,88 +72,90 @@ export default function App() {
     })();
   }, []);
 
+  const loginStatus = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('token');
+      if (userToken !== null) {
+        setLogin(true);
+      } else {
+        setLogin(false);
+      }
+      console.log("Login Status:", login);
+    } catch (error) {
+      console.error("Failed to retrieve login status:", error);
+    }
+  };
+
   if (!fontsLoaded) {
     return null; // Show splash or loading screen
   }
 
-  const loginStatus = async () => {
-    const userToken = await AsyncStorage.getItem('token')
-
-    if(userToken !==null){
-      setLogin(true)
-    }else{
-      setLogin(false)
-    }
-    console.log(login);
-    
-  };
-
   return (
     <UserLocationContext.Provider value={{ location, setLocation }}>
       <UserReservedGeoCode.Provider value={{ address, setAddress }}>
-      <LoginContext.Provider value={{ login, setLogin }}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Reservation"
-                component={BottomTab}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="Restaurant-Details"
-                component={RestaurantNavigator}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="Sign-Up"
-                component={SignUp}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
+        <LoginContext.Provider value={{ login, setLogin }}>
+          <SafeAreaView style={{ flex: 1 }}>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Reservation"
+                  component={BottomTab}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
                 />
                 <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="EditProfile"
-                component={EditProfile}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="AdminDashboard"
-                component={Dashboard}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-              <Stack.Screen
-                name="SuperAdminDashboard"
-                component={SuperAdmin}
-                options={{
-                  headerStyle: { backgroundColor: COLORS.offwhite },
-                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
+                  name="Restaurant-Details"
+                  component={RestaurantNavigator}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Sign-Up"
+                  component={SignUp}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="EditProfile"
+                  component={EditProfile}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="AdminDashboard"
+                  component={Dashboard}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="SuperAdminDashboard"
+                  component={SuperAdmin}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
         </LoginContext.Provider>
       </UserReservedGeoCode.Provider>
     </UserLocationContext.Provider>
