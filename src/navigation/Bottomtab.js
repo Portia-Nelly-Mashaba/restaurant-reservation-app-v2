@@ -1,52 +1,34 @@
 import { SafeAreaView } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import Home from "../screens/Home";
 import Reservations from "../screens/Reservations";
 import Favorites from "../screens/Favorites";
 import Profile from "../screens/Profile";
-import Login from "../screens/Login";
 import { COLORS } from "../constants/theme";
 import { LoginContext } from "../context/LoginContext";
+import Login from "../screens/Login";
+
 
 const Tab = createBottomTabNavigator();
 
+const tabBarStyle = {
+  backgroundColor: COLORS.dark, // Use a dark color for the background
+  borderTopWidth: 0,
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: 70, // Adjust height as needed
+  paddingBottom: 10, // Add padding to the bottom
+  paddingTop: 10, // Add padding to the top
+};
+
 const BottomTab = () => {
-  const { login, setLogin } = useContext(LoginContext);
-  console.log("Login Context:", login);
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const userToken = await AsyncStorage.getItem('token');
-        if (userToken) {
-          setLogin(true);
-        } else {
-          setLogin(false);
-        }
-      } catch (error) {
-        console.error("Failed to retrieve login status:", error);
-      }
-    };
-
-    checkLoginStatus();
-  }, [setLogin]);
-
-  const tabBarStyle = {
-    backgroundColor: COLORS.dark,
-    borderTopWidth: 0,
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 70,
-    paddingBottom: 10,
-    paddingTop: 10,
-  };
-
+  const {login, setLogin} = useContext(LoginContext)
+  console.log(login);
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>
       <Tab.Navigator
@@ -100,7 +82,8 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={login ? Profile : Login}
+          component={login ? Profile: Login}
+          // component={Profile}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons
