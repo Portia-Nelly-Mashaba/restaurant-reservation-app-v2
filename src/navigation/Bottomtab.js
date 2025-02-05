@@ -10,7 +10,6 @@ import { COLORS } from "../constants/theme";
 import { LoginContext } from "../context/LoginContext";
 import Login from "../screens/Login";
 
-
 const Tab = createBottomTabNavigator();
 
 const tabBarStyle = {
@@ -82,8 +81,8 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={login ? Profile: Login}
-          // component={Profile}
+          // component={login ? Profile: Login}
+          component={Profile}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons

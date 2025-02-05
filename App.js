@@ -19,6 +19,7 @@ import EditProfile from "./src/screens/EditProfile";
 import Dashboard from "./src/Admin/Dashboard";
 import SuperAdmin from "./src/Admin/SuperAdmin";
 import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
+import RegisterRestaurant from "./src/Admin/RegisterRestaurant";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -148,6 +149,14 @@ export default function App() {
                 <Stack.Screen
                   name="SuperAdminDashboard"
                   component={SuperAdmin}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="RegisterRestaurant"
+                  component={RegisterRestaurant}
                   options={{
                     headerStyle: { backgroundColor: COLORS.offwhite },
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
