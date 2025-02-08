@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "../../../constants/theme"; // Replace with your theme file
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation
 
 // Example user data
 const profiles = [
@@ -51,6 +52,7 @@ const profiles = [
 
 const Users = () => {
   const [activeTab, setActiveTab] = useState("Customers");
+  const navigation = useNavigation(); // Initialize navigation
 
   // Filter users based on userType
   const customers = profiles.filter((user) => user.userType === "Client");
@@ -71,26 +73,33 @@ const Users = () => {
     }
   };
 
+  // Handle user click
+  const handleUserClick = (user) => {
+    navigation.navigate("User Profile", { user }); // Navigate to User screen with user data
+  };
+
   const renderUserItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.row}>
-        <Image source={{ uri: item.imageUrl }} style={styles.userImage} />
-        <View style={styles.details}>
-          <View style={styles.header}>
-            <Text style={styles.userName}>{item.name}</Text>
-            <View style={styles.icons}>
-              <TouchableOpacity>
-                <AntDesign name="edit" size={18} color="blue" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="cancel" size={18} color="red" />
-              </TouchableOpacity>
+    <TouchableOpacity onPress={() => handleUserClick(item)}>
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <Image source={{ uri: item.imageUrl }} style={styles.userImage} />
+          <View style={styles.details}>
+            <View style={styles.header}>
+              <Text style={styles.userName}>{item.name}</Text>
+              <View style={styles.icons}>
+                <TouchableOpacity>
+                  <AntDesign name="edit" size={18} color="blue" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialIcons name="cancel" size={18} color="red" />
+                </TouchableOpacity>
+              </View>
             </View>
+            <Text style={styles.userEmail}>{item.email}</Text>
           </View>
-          <Text style={styles.userEmail}>{item.email}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
