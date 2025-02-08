@@ -236,7 +236,7 @@ const categories = [
       email: "traveler42@example.com",
       uid: "UID002",
       address: ["456 Elm Street, LA"],
-      userType: "Vendor",
+      userType: "Client",
       profile_img: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       updatedAt: "2025-01-19",
     },

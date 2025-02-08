@@ -27,6 +27,7 @@ import RestaurantMenuListView from "./src/Admin/superAdmin/restaurantManagement/
 import RestaurantMenu from "./src/Admin/superAdmin/RestaurantMenu";
 import StatusControl from "./src/Admin/superAdmin/restaurantManagement/StatusControl";
 import Users from "./src/Admin/superAdmin/userManagement/Users";
+import User from "./src/Admin/superAdmin/userManagement/User";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -221,6 +222,14 @@ export default function App() {
                 <Stack.Screen
                   name="App Users"
                   component={Users}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="User Profile"
+                  component={User}
                   options={{
                     headerStyle: { backgroundColor: COLORS.offwhite },
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },

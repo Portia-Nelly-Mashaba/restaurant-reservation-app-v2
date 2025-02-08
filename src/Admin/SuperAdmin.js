@@ -184,13 +184,13 @@ const SuperAdmin = () => {
         </TouchableOpacity>
 
         {/* Manage Users */}
-        <TouchableOpacity style={styles.optionButton}onPress={() => navigation.navigate('App Users')}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('App Users')}>
           <FontAwesome name="users" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Users</Text>
         </TouchableOpacity>
 
         {/* Manage Reservations */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('App Users')}>
           <AntDesign name="calendar" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Reservations</Text>
         </TouchableOpacity>
