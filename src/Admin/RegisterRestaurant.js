@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -25,20 +26,44 @@ const validationSchema = Yup.object().shape({
         is: true,
         then: Yup.number().required("Maximum party size is required"),
     }),
+    menuItems: Yup.array().of(
+        Yup.object().shape({
+            title: Yup.string().required("Menu title is required"),
+            description: Yup.string().required("Menu description is required"),
+            image: Yup.string().required("Menu image is required"),
+        })
+    ),
 });
 
 const RegisterRestaurant = ({ navigation }) => {
+    const [specialMenus, setSpecialMenus] = useState([]);
+    const [alcohol, setAlcohol] = useState(null);
+    const [dessert, setDessert] = useState(null);
     const [step, setStep] = useState(1);
+    const [restaurantFeatures, setRestaurantFeatures] = useState({
+        placeToPray: false,
+        petFriendly: false,
+        kidFriendly: false,
+        familyStyle: false,
+        romanticStyle: false,
+        liveMusic: false,
+        parking: false,
+        karaoke: false,
+        outdoorSeating: false,
+        wifi: false,
+        boardGames: false
+    });
 
-    const handleNext = () => {
-        if (step < 5) {
-            setStep(step + 1); // Increase step until 5
-        }
+    const handleFeatureChange = (feature) => {
+        setRestaurantFeatures({
+            ...restaurantFeatures,
+            [feature]: !restaurantFeatures[feature]
+        });
     };
 
-    const handlePrevious = () => {
-        if (step > 1) {
-            setStep(step - 1); // Decrease step until 1
+    const handleNext = () => {
+        if (step < 7) {
+            setStep(step + 1); // Increase step until 5
         }
     };
 
@@ -49,6 +74,14 @@ const RegisterRestaurant = ({ navigation }) => {
             navigation.navigate("Home");
         } catch (error) {
             Alert.alert("Error", error.response?.data?.message || "Server error");
+        }
+    };
+
+    const handleSpecialMenuSelection = (menu) => {
+        if (specialMenus.includes(menu)) {
+            setSpecialMenus(specialMenus.filter((item) => item !== menu));
+        } else {
+            setSpecialMenus([...specialMenus, menu]);
         }
     };
 
@@ -71,11 +104,10 @@ const RegisterRestaurant = ({ navigation }) => {
                 advanceReservationPeriod: "",
                 advanceReservationPeriodHours: "",
                 maxPartySize: "",
-                menuTitle: "",
-                menuDescription: "",
-                menuImage: null,
+                menuItems: Array(5).fill({ title: "", description: "", image: null }),
                 alcoholServices: false,
                 dessertService: false,
+                restaurantFeatures,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -156,10 +188,7 @@ const RegisterRestaurant = ({ navigation }) => {
                                 onBlur={handleBlur("twitter")}
                                 error={touched.twitter && errors.twitter}
                             />
-                            <View style={styles.buttonContainer}>
-                                <PrevButton onPress={handlePrevious} />
-                                <NextButton onPress={handleNext} />
-                            </View>
+                            <NextButton onPress={handleNext} />
                         </View>
                     )}
 
@@ -199,10 +228,7 @@ const RegisterRestaurant = ({ navigation }) => {
                                 error={touched.averagePrice && errors.averagePrice}
                                 keyboardType="numeric"
                             />
-                            <View style={styles.buttonContainer}>
-                                <PrevButton onPress={handlePrevious} />
-                                <NextButton onPress={handleNext} />
-                            </View>
+                            <NextButton onPress={handleNext} />
                         </View>
                     )}
 
@@ -248,59 +274,141 @@ const RegisterRestaurant = ({ navigation }) => {
                                     />
                                 </>
                             )}
-                            <View style={styles.buttonContainer}>
-                                <PrevButton onPress={handlePrevious} />
-                                <NextButton onPress={handleNext} />
-                            </View>
+                            <NextButton onPress={handleNext} />
                         </View>
                     )}
 
                     {step === 5 && (
                         <View>
-                            <Text style={styles.heading}>Menu</Text>
-                            <InputField
-                                label="Menu Title"
-                                value={values.menuTitle}
-                                onChangeText={handleChange("menuTitle")}
-                                onBlur={handleBlur("menuTitle")}
-                                error={touched.menuTitle && errors.menuTitle}
-                            />
-                            <InputField
-                                label="Menu Description"
-                                value={values.menuDescription}
-                                onChangeText={handleChange("menuDescription")}
-                                onBlur={handleBlur("menuDescription")}
-                                error={touched.menuDescription && errors.menuDescription}
-                            />
-                            <View style={styles.inputWrapper}>
-                                <Text style={styles.label}>Upload Image</Text>
-                                <TouchableOpacity style={styles.uploadButton}>
-                                    <Text style={styles.uploadText}>Choose Image</Text>
+                            <Text style={styles.heading}>Menu and Services</Text>
+                            {values.menuItems.map((item, index) => (
+                                <View key={index}>
+                                    <Text style={styles.subHeading}>Menu Item {index + 1}</Text>
+                                    <InputField
+                                        label="Menu Title"
+                                        value={values.menuItems[index].title}
+                                        onChangeText={handleChange(`menuItems[${index}].title`)}
+                                        onBlur={handleBlur(`menuItems[${index}].title`)}
+                                        error={touched.menuItems?.[index]?.title && errors.menuItems?.[index]?.title}
+                                    />
+                                    <InputField
+                                        label="Menu Description"
+                                        value={values.menuItems[index].description}
+                                        onChangeText={handleChange(`menuItems[${index}].description`)}
+                                        onBlur={handleBlur(`menuItems[${index}].description`)}
+                                        error={touched.menuItems?.[index]?.description && errors.menuItems?.[index]?.description}
+                                    />
+                                    <View style={styles.inputWrapper}>
+                                        <Text>Upload Menu Image</Text>
+                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+                                            <AntDesign name="upload" size={24} color="black" />
+                                            <Text style={{ marginLeft: 10 }}>Upload Image</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            ))}
+                            <Text>Alcohol Service</Text>
+                            <View style={{ flexDirection: "row" }}>
+                                <TouchableOpacity onPress={() => setAlcohol(true)}>
+                                    <MaterialIcons name={alcohol === true ? "radio-button-checked" : "radio-button-unchecked"} size={24} color="black" />
+                                    <Text>Yes</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setAlcohol(false)}>
+                                    <MaterialIcons name={alcohol === false ? "radio-button-checked" : "radio-button-unchecked"} size={24} color="black" />
+                                    <Text>No</Text>
                                 </TouchableOpacity>
                             </View>
-                            <InputField
-                                label="Alcohol Services"
-                                value={values.alcoholServices ? "Yes" : "No"}
-                                onChangeText={handleChange("alcoholServices")}
-                                onBlur={handleBlur("alcoholServices")}
-                                error={touched.alcoholServices && errors.alcoholServices}
+
+                            <Text>Dessert Service</Text>
+                            <View style={{ flexDirection: "row" }}>
+                                <TouchableOpacity onPress={() => setDessert(true)}>
+                                    <MaterialIcons name={dessert === true ? "radio-button-checked" : "radio-button-unchecked"} size={24} color="black" />
+                                    <Text>Yes</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setDessert(false)}>
+                                    <MaterialIcons name={dessert === false ? "radio-button-checked" : "radio-button-unchecked"} size={24} color="black" />
+                                    <Text>No</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <Text>Special Menu</Text>
+                            <View>
+                                {["Vegan", "Gluten-Free", "Halal"].map((menu) => (
+                                    <TouchableOpacity key={menu} onPress={() => handleSpecialMenuSelection(menu)} style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <MaterialIcons name={specialMenus.includes(menu) ? "check-box" : "check-box-outline-blank"} size={24} color="black" />
+                                        <Text style={{ marginLeft: 10 }}>{menu}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                            <NextButton onPress={handleNext} />
+                            
+                        </View>
+                    )}
+
+{step === 6 && (
+                        <View>
+                            <Text style={styles.heading}>Restaurant Features</Text>
+                            <View>
+                                {[
+                                    "placeToPray",
+                                    "petFriendly",
+                                    "kidFriendly",
+                                    "familyStyle",
+                                    "romanticStyle",
+                                    "liveMusic",
+                                    "parking",
+                                    "karaoke",
+                                    "outdoorSeating",
+                                    "wifi",
+                                    "boardGames",
+                                ].map((feature) => (
+                                    <TouchableOpacity
+                                        key={feature}
+                                        onPress={() => handleFeatureChange(feature)}
+                                        style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}
+                                    >
+                                        <MaterialIcons
+                                            name={restaurantFeatures[feature] ? "check-box" : "check-box-outline-blank"}
+                                            size={24}
+                                            color="black"
+                                        />
+                                        <Text style={{ marginLeft: 10 }}>{feature.replace(/([A-Z])/g, ' $1').toUpperCase()}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+
+                            <NextButton onPress={handleNext} />
+                            
+                        </View>
+                    )}
+
+{step === 7 && (
+                        <View>
+                            <Text style={styles.heading}>Media and Gallery</Text>
+                            <View style={styles.inputWrapper}>
+                                <Text>Upload Restaurant Photos</Text>
+                                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+                                    <AntDesign name="upload" size={24} color="black" />
+                                    <Text style={{ marginLeft: 10 }}>Upload Image</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <TextInput
+                                style={styles.textArea}
+                                placeholder="Enter additional information"
+                                multiline
+                                numberOfLines={4}
+                                value={values.additionalInformation}
+                                onChangeText={handleChange("additionalInformation")}
+                                onBlur={handleBlur("additionalInformation")}
                             />
-                            <InputField
-                                label="Dessert Service"
-                                value={values.dessertService ? "Yes" : "No"}
-                                onChangeText={handleChange("dessertService")}
-                                onBlur={handleBlur("dessertService")}
-                                error={touched.dessertService && errors.dessertService}
-                            />
+
                             <TouchableOpacity
                                 style={styles.nextButton}
-                                onPress={() => handleSubmit(values)} // Submit action on step 5
+                                onPress={() => handleSubmit(values)} // Submit action on step 6
                             >
                                 <Text style={styles.nextButtonText}>Submit</Text>
                             </TouchableOpacity>
-                            <View style={styles.buttonContainer}>
-                                <PrevButton onPress={handlePrevious} />
-                            </View>
                         </View>
                     )}
                 </ScrollView>
@@ -309,12 +417,11 @@ const RegisterRestaurant = ({ navigation }) => {
     );
 };
 
-
 const InputField = ({ label, icon, error, ...props }) => (
     <View style={styles.inputWrapper}>
         <Text style={styles.label}>{label}</Text>
         <View style={styles.inputField}>
-            <MaterialCommunityIcons name={icon} size={20} color={COLORS.gray} style={styles.iconStyle} />
+            {icon && <MaterialCommunityIcons name={icon} size={20} color={COLORS.gray} style={styles.iconStyle} />}
             <TextInput style={styles.input} {...props} />
         </View>
         {error && <Text style={styles.errorText}>{error}</Text>}
@@ -327,12 +434,6 @@ const NextButton = ({ onPress }) => (
     </TouchableOpacity>
 );
 
-const PrevButton = ({ onPress }) => (
-    <TouchableOpacity style={styles.prevButton} onPress={onPress}>
-        <Text style={styles.nextButtonText}>Previous</Text>
-    </TouchableOpacity>
-);
-
 const SubmitButton = ({ onPress }) => (
     <TouchableOpacity style={styles.nextButton} onPress={onPress}>
         <Text style={styles.nextButtonText}>Submit</Text>
@@ -342,6 +443,7 @@ const SubmitButton = ({ onPress }) => (
 const styles = StyleSheet.create({
     container: { flexGrow: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 },
     heading: { textAlign: "center", fontSize: SIZES.xLarge, color: COLORS.secondary, marginBottom: SIZES.large, marginTop: SIZES.large },
+    subHeading: { textAlign: "center", fontSize: SIZES.large, color: COLORS.secondary, marginBottom: SIZES.medium, marginTop: SIZES.medium },
     inputWrapper: { marginBottom: 20 },
     label: { fontSize: SIZES.small, color: COLORS.black, marginBottom: 5 },
     inputField: { flexDirection: "row", alignItems: "center", borderColor: COLORS.gray, borderWidth: 1, borderRadius: 12, height: 50, paddingHorizontal: 15 },
@@ -352,7 +454,7 @@ const styles = StyleSheet.create({
     errorText: { color: "red", fontSize: SIZES.small, marginTop: 5 },
     buttonContainer: { flexDirection: "row", justifyContent: "space-between", marginTop: SIZES.large },
     prevButton: { height: 50, backgroundColor: COLORS.gray, borderRadius: 12, justifyContent: "center", alignItems: "center", flex: 1, marginRight: 10 },
-    uploadButton: { height: 50, backgroundColor: COLORS.primary, borderRadius: 12, justifyContent: "center", alignItems: "center" },
+    uploadButton: { height: 50, backgroundColor: COLORS.dark, borderRadius: 12, justifyContent: "center", alignItems: "center" },
     uploadText: { color: COLORS.white },
 });
 
