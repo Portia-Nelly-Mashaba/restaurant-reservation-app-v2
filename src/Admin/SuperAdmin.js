@@ -190,13 +190,13 @@ const SuperAdmin = () => {
         </TouchableOpacity>
 
         {/* Manage Reservations */}
-        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('App Users')}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Manage Reservations')}>
           <AntDesign name="calendar" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Reservations</Text>
         </TouchableOpacity>
 
         {/* Manage categories */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Manage Categories')}>
           <MaterialIcons name="list" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Categories</Text>
         </TouchableOpacity>

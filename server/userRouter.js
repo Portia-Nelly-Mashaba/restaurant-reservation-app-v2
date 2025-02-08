@@ -1,6 +1,6 @@
 import express from 'express'
-import { getUserProfileController, loginController, logoutController, registerController, updateprofileController, updateProfilePicController, updateUserprofileController } from '../controllers/userController.js'
-import { isAuth } from '../middlewares/authMiddleware.js';
+import { getUserProfileController, loginController, logoutController, registerController, updateprofileController, updateProfilePicController, updateUserprofileController } from './controllers/userController.js'
+import { isAuth } from './middlewares/authMiddleware.js';
 
 
 

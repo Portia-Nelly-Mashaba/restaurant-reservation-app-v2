@@ -28,6 +28,9 @@ import RestaurantMenu from "./src/Admin/superAdmin/RestaurantMenu";
 import StatusControl from "./src/Admin/superAdmin/restaurantManagement/StatusControl";
 import Users from "./src/Admin/superAdmin/userManagement/Users";
 import User from "./src/Admin/superAdmin/userManagement/User";
+import ManageReservation from "./src/Admin/superAdmin/manageReservations/ManageReservation";
+import ReservationByAdmin from "./src/Admin/superAdmin/manageReservations/ReservationByAdmin";
+import ManageCategories from "./src/Admin/superAdmin/categories/ManageCategories";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -230,6 +233,30 @@ export default function App() {
                 <Stack.Screen
                   name="User Profile"
                   component={User}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Manage Reservations"
+                  component={ManageReservation}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="ReservationByAdmin"
+                  component={ReservationByAdmin}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Manage Categories"
+                  component={ManageCategories}
                   options={{
                     headerStyle: { backgroundColor: COLORS.offwhite },
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
