@@ -3,6 +3,7 @@ import React from 'react';
 import { COLORS } from '../constants/theme';
 import { AntDesign, MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
 import { LineChart, BarChart, PieChart, ProgressChart } from 'react-native-chart-kit';
+import { useNavigation } from '@react-navigation/native';
 
 const SuperAdmin = () => {
   const screenWidth = Dimensions.get('window').width;
@@ -12,6 +13,7 @@ const SuperAdmin = () => {
   const totalUsers = 1200;
   const activeReservations = 85;
   const totalRevenue = 25000; // in dollars
+  const navigation = useNavigation(); 
 
   // Chart data
   const reservationData = {
@@ -176,13 +178,13 @@ const SuperAdmin = () => {
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.optionsContainer}>
         {/* Manage Restaurants */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('RestaurantManagement')}>
           <MaterialIcons name="restaurant" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Restaurants</Text>
         </TouchableOpacity>
 
         {/* Manage Users */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton}onPress={() => navigation.navigate('App Users')}>
           <FontAwesome name="users" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Users</Text>
         </TouchableOpacity>

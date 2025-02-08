@@ -20,6 +20,13 @@ import Dashboard from "./src/Admin/Dashboard";
 import SuperAdmin from "./src/Admin/SuperAdmin";
 import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 import RegisterRestaurant from "./src/Admin/RegisterRestaurant";
+import RestaurantManagement from "./src/Admin/superAdmin/restaurantManagement/RestaurantManagement";
+import RestaurantListView from "./src/Admin/superAdmin/restaurantManagement/RestaurantListView";
+import RestaurantListViewDetail from "./src/Admin/superAdmin/restaurantManagement/RestaurantListViewDetail";
+import RestaurantMenuListView from "./src/Admin/superAdmin/restaurantManagement/RestaurantMenuListView";
+import RestaurantMenu from "./src/Admin/superAdmin/RestaurantMenu";
+import StatusControl from "./src/Admin/superAdmin/restaurantManagement/StatusControl";
+import Users from "./src/Admin/superAdmin/userManagement/Users";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -162,6 +169,64 @@ export default function App() {
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
                   }}
                 />
+                <Stack.Screen
+                  name="RestaurantManagement"
+                  component={RestaurantManagement}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Restaurant List View"
+                  component={RestaurantListView}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="RestaurantListViewDetail"
+                  component={RestaurantListViewDetail}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Restaurant Menu List View"
+                  component={RestaurantMenuListView}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+
+                <Stack.Screen
+                  name="Restaurant Menu"
+                  component={RestaurantMenu}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Restaurant Status"
+                  component={StatusControl}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="App Users"
+                  component={Users}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+
               </Stack.Navigator>
             </NavigationContainer>
           </SafeAreaView>
