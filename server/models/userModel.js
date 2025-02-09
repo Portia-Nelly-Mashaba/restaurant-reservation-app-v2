@@ -1,83 +1,79 @@
 import mongoose from "mongoose";
-import  bcrypt from 'bcryptjs';
-import JWT from 'jsonwebtoken'
+import bcrypt from "bcryptjs";
+import JWT from "jsonwebtoken";
 
-
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'name is required']
+      type: String,
+      required: [true, "Name is required"],
     },
     surname: {
-        type: String,
-        required: [true, 'name is required']
+      type: String,
+      required: [true, "Surname is required"], // Fixed error message
     },
     email: {
-        type: String,
-        required: [true, 'email is required'],
-        unique: [true, 'email already taken']
+      type: String,
+      required: [true, "Email is required"],
+      unique: [true, "Email already taken"],
     },
     password: {
-        type: String,
-        required: [true, 'password is required'],
-        minLength: [6, 'password length should be greater than 6 characters']
+      type: String,
+      required: [true, "Password is required"],
+      minLength: [6, "Password length should be at least 6 characters"],
     },
     address: {
-        type: String,
-        required: [true, 'address is required']
+      type: String,
+      required: [true, "Address is required"],
     },
     city: {
-        type: String,
-        required: [true, 'city is required']
+      type: String,
+      required: [true, "City is required"],
     },
     country: {
-        type: String,
-        required: [true, 'country is required']
+      type: String,
+      required: [true, "Country is required"],
     },
     phone: {
-        type: String,
-        required: [true, 'phone no is required']
+      type: String,
+      required: [true, "Phone number is required"],
     },
     profile_img: {
-        public_id: {
-            type: String
-        },
-        url: {
-            type: String
-        }
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     usertype: {
-        type: String,
-        enum: ["Client", "Admin", "SuperAdmin"], 
-        default: "Client" 
-    }
-}, { timestamps: true });
+      type: String,
+      enum: ["Client", "Admin", "SuperAdmin"],
+      default: "Client",
+    },
+  },
+  { timestamps: true }
+);
 
-//function
-//hash func
-
-// userSchema.pre('save', async function(next){
-//     if(!this.ismodified('password')) return next();
-//     this.password = await bcrypt.hash(this.password, 10)
-// })
-userSchema.pre('save', async function() {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next(); // Skip hashing if password isn't changed
+  this.password = await bcrypt.hash(this.password, 10);
+  next(); // Move to the next middleware
 });
 
-//compare function
-userSchema.methods.comparePassword = async function(plainPassword) {
-    return await bcrypt.compare(plainPassword, this.password)
-}
-
-//JWT TOKEN
-userSchema.methods.generateToken = function() {
-    return JWT.sign({ _id: this._id }, process.env.JWT_SECRET, {
-        expiresIn: '7d',
-    });
+// Compare password method
+userSchema.methods.comparePassword = async function (plainPassword) {
+  return await bcrypt.compare(plainPassword, this.password);
 };
 
-const User = mongoose.model('Users', userSchema);
+// Generate JWT token
+userSchema.methods.generateToken = function () {
+  return JWT.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
+
+const User = mongoose.model("Users", userSchema);
 
 export default User;
