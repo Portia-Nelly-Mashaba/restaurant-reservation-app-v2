@@ -6,6 +6,15 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { Picker } from '@react-native-picker/picker'; 
+
+const categories = [
+    { _id: 1, name: "Italian", value: "fine_dining" },
+    { _id: 2, name: "Buffet", value: "buffet" },
+    { _id: 3, name: "Cafe", value: "cafe" },
+    { _id: 4, name: "Fast Food", value: "fast_food" },
+    { _id: 5, name: "Live Music", value: "casual_dining" },
+];
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -69,19 +78,44 @@ const RegisterRestaurant = ({ navigation }) => {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/restaurant/register", values);
-            Alert.alert("Success", "Registration successful!");
-            navigation.navigate("Home");
+            // Prepare the payload to match the backend's expected structure
+            const payload = {
+                email: values.email,
+                phone: values.phone,
+                address: values.address,
+                city: values.city,
+                country: values.country,
+                facebook: values.facebook,
+                instagram: values.instagram,
+                twitter: values.twitter,
+                hoursOfOperation: values.hoursOfOperation,
+                holidayHours: values.holidayHours,
+                cuisineType: values.cuisineType,
+                averagePrice: values.averagePrice,
+                reservationAllowed: values.reservationAllowed,
+                advanceReservationPeriod: values.advanceReservationPeriod,
+                advanceReservationPeriodHours: values.advanceReservationPeriodHours,
+                maxPartySize: values.maxPartySize,
+                menuItems: values.menuItems,
+                alcoholServices: alcohol, // Use the state value for alcohol
+                dessertService: dessert, // Use the state value for dessert
+                specialMenus: specialMenus, // Include special menus
+                restaurantFeatures: restaurantFeatures, // Include restaurant features
+            };
+    
+            // Send the POST request to the backend
+            const response = await axios.post("http://192.168.1.162:8080/api/restaurant", payload);
+    
+            // Handle success
+            Alert.alert("Success", "Restaurant registration successful!");
+            navigation.navigate("Home"); // Navigate to the home screen or another appropriate screen
         } catch (error) {
-            Alert.alert("Error", error.response?.data?.message || "Server error");
-        }
-    };
-
-    const handleSpecialMenuSelection = (menu) => {
-        if (specialMenus.includes(menu)) {
-            setSpecialMenus(specialMenus.filter((item) => item !== menu));
-        } else {
-            setSpecialMenus([...specialMenus, menu]);
+            // Handle errors
+            console.error("Error:", error);
+            Alert.alert(
+                "Error",
+                error.response?.data?.message || "An error occurred while registering the restaurant."
+            );
         }
     };
 
@@ -211,14 +245,25 @@ const RegisterRestaurant = ({ navigation }) => {
                                 onBlur={handleBlur("holidayHours")}
                                 error={touched.holidayHours && errors.holidayHours}
                             />
-                            <InputField
-                                label="Cuisine Type"
-                                icon="silverware-fork-knife"
-                                value={values.cuisineType}
-                                onChangeText={handleChange("cuisineType")}
+                            {/* Cuisine Type as a dropdown */}
+                            <Text style={styles.label}>Cuisine Type</Text>
+                            <Picker
+                                selectedValue={values.cuisineType}
+                                onValueChange={handleChange("cuisineType")}
                                 onBlur={handleBlur("cuisineType")}
-                                error={touched.cuisineType && errors.cuisineType}
-                            />
+                            >
+                                <Picker.Item label="Select Cuisine Type" value="" />
+                                {categories.map((category) => (
+                                    <Picker.Item
+                                        key={category._id}
+                                        label={category.name}
+                                        value={category.value}
+                                    />
+                                ))}
+                            </Picker>
+                            {touched.cuisineType && errors.cuisineType && (
+                                <Text style={styles.errorText}>{errors.cuisineType}</Text>
+                            )}
                             <InputField
                                 label="Average Price"
                                 icon="currency-usd"

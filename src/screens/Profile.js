@@ -81,9 +81,9 @@ const Profile = () => {
         <TouchableOpacity
           style={styles.optionButton}
           onPress={() => {
-            if (user.user_id === '67a2114906cd0f19b5f6a825') {
+            if (user.usertype === 'SuperAdmin') {
               navigation.navigate("SuperAdminDashboard");
-            } else {
+            } else if (user.usertype === 'Admin') {
               navigation.navigate("AdminDashboard");
             }
           }}
@@ -91,7 +91,6 @@ const Profile = () => {
           <MaterialIcons name="admin-panel-settings" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Admin Panel</Text>
         </TouchableOpacity>
-
         {/* Registration Tile */}
         <TouchableOpacity onPress={() => navigation.navigate("RegisterRestaurant")}>
           <RegistrationTile
