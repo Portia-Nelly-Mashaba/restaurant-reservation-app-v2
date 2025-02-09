@@ -45,7 +45,7 @@ const Profile = () => {
   const [addressVisible, setAddressVisible] = useState(false);
 
   // User data (mock for now)
-  const user = profiles[1];
+  const user = profiles[0];
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>

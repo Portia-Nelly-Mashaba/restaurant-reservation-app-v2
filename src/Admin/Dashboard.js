@@ -3,9 +3,12 @@ import React from 'react';
 import { COLORS } from '../constants/theme';
 import { AntDesign, MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
 import { LineChart, BarChart, PieChart, ProgressChart } from 'react-native-chart-kit';
+import { useNavigation } from '@react-navigation/native';
 
 const Dashboard = () => {
   const screenWidth = Dimensions.get('window').width;
+  const navigation = useNavigation();
+
 
   // Chart data
   const reservationData = {
@@ -150,13 +153,18 @@ const Dashboard = () => {
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.optionsContainer}>
         {/* Manage Reservations */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => navigation.navigate("RestaurantReservation")}
+        >
           <AntDesign name="calendar" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Reservations</Text>
         </TouchableOpacity>
 
+
+
         {/* Manage Tables */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("Manage Tables")}>
           <Feather name="grid" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Manage Tables</Text>
         </TouchableOpacity>

@@ -201,6 +201,14 @@ const SuperAdmin = () => {
           <Text style={styles.optionText}>Manage Categories</Text>
         </TouchableOpacity>
 
+        
+        {/* Customer Reviews */}
+        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Customer Reviews')}>
+          <Feather name="star" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Customer Reviews</Text>
+        </TouchableOpacity>
+
+
         {/* Platform Settings */}
         <TouchableOpacity style={styles.optionButton}>
           <MaterialIcons name="settings" size={24} color={COLORS.primary} />

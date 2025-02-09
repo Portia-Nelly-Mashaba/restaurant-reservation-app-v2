@@ -31,6 +31,13 @@ import User from "./src/Admin/superAdmin/userManagement/User";
 import ManageReservation from "./src/Admin/superAdmin/manageReservations/ManageReservation";
 import ReservationByAdmin from "./src/Admin/superAdmin/manageReservations/ReservationByAdmin";
 import ManageCategories from "./src/Admin/superAdmin/categories/ManageCategories";
+import CustomerReviews from "./src/Admin/superAdmin/customerReview/CustomerReviews";
+import RestaurantReservation from "./src/Admin/restaurantAdmin/reservationManagement/RestaurantReservation";
+import CustomerReservationDetails from "./src/Admin/restaurantAdmin/reservationManagement/CustomerReservationDetails";
+import AddReservation from "./src/Admin/restaurantAdmin/reservationManagement/AddReservation";
+import ManageTables from "./src/Admin/restaurantAdmin/manageTables/ManageTables";
+import TableDetails from "./src/Admin/restaurantAdmin/manageTables/TableDetails";
+
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -257,6 +264,54 @@ export default function App() {
                 <Stack.Screen
                   name="Manage Categories"
                   component={ManageCategories}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Customer Reviews"
+                  component={CustomerReviews}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="RestaurantReservation"
+                  component={RestaurantReservation}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="CustomerReservationDetails"
+                  component={CustomerReservationDetails}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="AddReservation"
+                  component={AddReservation}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Manage Tables"
+                  component={ManageTables}
+                  options={{
+                    headerStyle: { backgroundColor: COLORS.offwhite },
+                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                  }}
+                />
+                <Stack.Screen
+                  name="Table Details"
+                  component={TableDetails}
                   options={{
                     headerStyle: { backgroundColor: COLORS.offwhite },
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
