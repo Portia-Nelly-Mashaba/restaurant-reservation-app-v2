@@ -27,6 +27,17 @@ const profiles = [
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     updatedAt: "2025-01-20",
   },
+  {
+    user_id: 1002,
+    username: "SuperAdmin",
+    email: "superadmin@example.com",
+    uid: "UID002",
+    address: ["456 Another St, CA"],
+    userType: "SuperAdmin",
+    profile_img:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    updatedAt: "2025-01-20",
+  },
 ];
 
 const Profile = () => {
@@ -34,7 +45,7 @@ const Profile = () => {
   const [addressVisible, setAddressVisible] = useState(false);
 
   // User data (mock for now)
-  const user = profiles[0];
+  const user = profiles[1];
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
@@ -72,18 +83,29 @@ const Profile = () => {
         </TouchableOpacity>
 
         {/* AdminPanel */}
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => {
+            if (user.user_id === 1002) {
+              navigation.navigate("SuperAdminDashboard");
+            } else {
+              navigation.navigate("AdminDashboard");
+            }
+          }}
+        >
           <MaterialIcons name="admin-panel-settings" size={24} color={COLORS.primary} />
           <Text style={styles.optionText}>Admin Panel</Text>
         </TouchableOpacity>
 
         {/* Registration Tile */}
-        <RegistrationTile
-          heading={"Register a restaurant"}
-          desc={
-            "Join our community and showcase your culinary delights to a wider audience."
-          }
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterRestaurant")}>
+          <RegistrationTile
+            heading={"Register a restaurant"}
+            desc={
+              "Join our community and showcase your culinary delights to a wider audience."
+            }
+          />
+        </TouchableOpacity>
 
         {/* Settings */}
         <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("EditProfile")}>

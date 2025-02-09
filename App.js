@@ -11,12 +11,26 @@ import BottomTab from "./src/navigation/Bottomtab";
 import { COLORS } from "./src/constants/theme";
 import { UserLocationContext } from "./src/context/UserLocationContext";
 import { UserReservedGeoCode } from "./src/context/UserReservedGeoCode";
-import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginContext } from "./src/context/LoginContext";
 import SignUp from "./src/screens/SignUp";
 import Login from "./src/screens/Login";
 import EditProfile from "./src/screens/EditProfile";
+import Dashboard from "./src/Admin/Dashboard";
+import SuperAdmin from "./src/Admin/SuperAdmin";
+import RestaurantNavigator from "./src/navigation/RestaurantNavigator";
+import RegisterRestaurant from "./src/Admin/RegisterRestaurant";
+import RestaurantManagement from "./src/Admin/superAdmin/restaurantManagement/RestaurantManagement";
+import RestaurantListView from "./src/Admin/superAdmin/restaurantManagement/RestaurantListView";
+import RestaurantListViewDetail from "./src/Admin/superAdmin/restaurantManagement/RestaurantListViewDetail";
+import RestaurantMenuListView from "./src/Admin/superAdmin/restaurantManagement/RestaurantMenuListView";
+import RestaurantMenu from "./src/Admin/superAdmin/RestaurantMenu";
+import StatusControl from "./src/Admin/superAdmin/restaurantManagement/StatusControl";
+import Users from "./src/Admin/superAdmin/userManagement/Users";
+import User from "./src/Admin/superAdmin/userManagement/User";
+import ManageReservation from "./src/Admin/superAdmin/manageReservations/ManageReservation";
+import ReservationByAdmin from "./src/Admin/superAdmin/manageReservations/ReservationByAdmin";
+import ManageCategories from "./src/Admin/superAdmin/categories/ManageCategories";
 
 const { height, width } = Dimensions.get("window"); // Get screen dimensions
 const Stack = createNativeStackNavigator();
@@ -70,21 +84,23 @@ export default function App() {
     })();
   }, []);
 
+  const loginStatus = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('token');
+      if (userToken !== null) {
+        setLogin(true);
+      } else {
+        setLogin(false);
+      }
+      console.log("Login Status:", login);
+    } catch (error) {
+      console.error("Failed to retrieve login status:", error);
+    }
+  };
+
   if (!fontsLoaded) {
     return null; // Show splash or loading screen
   }
-
-  const loginStatus = async () => {
-    const userToken = await AsyncStorage.getItem('token')
-
-    if(userToken !==null){
-      setLogin(true)
-    }else{
-      setLogin(false)
-    }
-    console.log(login);
-    
-  };
 
   return (
     <UserLocationContext.Provider value={{ location, setLocation }}>
@@ -92,49 +108,48 @@ export default function App() {
       <LoginContext.Provider value={{ login, setLogin }}>
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationContainer>
-          <Stack.Navigator>
-  <Stack.Screen
-    name="Reservation"
-    component={BottomTab}
-    options={{
-      headerStyle: { backgroundColor: COLORS.offwhite },
-      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-    }}
-  />
-  <Stack.Screen
-    name="Restaurant-Details"
-    component={RestaurantNavigator}
-    options={{
-      headerStyle: { backgroundColor: COLORS.offwhite },
-      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-    }}
-  />
-  <Stack.Screen
-    name="Sign-Up"  // Ensure this name matches what you're using to navigate
-    component={SignUp}
-    options={{
-      headerStyle: { backgroundColor: COLORS.offwhite },
-      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-    }}
-  />
-  <Stack.Screen
-    name="Login"
-    component={Login}
-    options={{
-      headerStyle: { backgroundColor: COLORS.offwhite },
-      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-    }}
-  />
-  <Stack.Screen
-    name="EditProfile"
-    component={EditProfile}
-    options={{
-      headerStyle: { backgroundColor: COLORS.offwhite },
-      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-    }}
-  />
-</Stack.Navigator>
-
+            <Stack.Navigator>
+              <Stack.Screen
+                name="Reservation"
+                component={BottomTab}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+              <Stack.Screen
+                name="Restaurant-Details"
+                component={RestaurantNavigator}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+              <Stack.Screen
+                name="Sign-Up"
+                component={SignUp}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+                />
+                <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+              <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                  headerStyle: { backgroundColor: COLORS.offwhite },
+                  headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                }}
+              />
+            </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>
         </LoginContext.Provider>

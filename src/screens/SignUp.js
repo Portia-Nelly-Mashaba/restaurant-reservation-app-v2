@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ScrollView,
   Text,
@@ -10,44 +10,24 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");  // Changed to 'name'
+  const [fullName, setfullName] = useState("");
   const [obsecureText, setObsecureText] = useState(true);
 
-  const handleSignUp = async () => {
-    if (!email || !password || !name) {
+  const handleSignUp = ({navigation}) => {
+    if (!email || !password || !fullName) {
       Alert.alert("Error", "Please provide all required fields");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://192.168.1.31:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    } else {
+      // Replace this with your actual registration API call
+      Alert.alert("Success", "Registration successful!", [
+        {
+          text: "OK",
+          onPress: () => navigation.navigate("Login"),
         },
-        body: JSON.stringify({ name, email, password }),  // Send 'name'
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        await AsyncStorage.setItem("userToken", data.token); // Store the token
-        Alert.alert("Success", "Registration successful!", [
-          {
-            text: "OK",
-            onPress: () => navigation.navigate("Login"), // Ensure Login is correctly named in the navigator
-          },
-        ]);
-      } else {
-        Alert.alert("Error", data.message || "Registration failed");
-      }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred. Please try again.");
+      ]);
     }
   };
 
@@ -62,9 +42,9 @@ const SignUp = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Text style={styles.heading}>Register</Text>
-        {/* Full Name Input */}
+        {/* Username Input */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Full Name</Text>
+          <Text style={styles.label}>FullName</Text>
           <View style={styles.inputField}>
             <MaterialCommunityIcons
               name="face-man-profile"
@@ -74,8 +54,8 @@ const SignUp = ({ navigation }) => {
             />
             <TextInput
               placeholder="Full Name"
-              value={name}  // Changed to 'name'
-              onChangeText={setName}  // Updates 'name'
+              value={fullName}
+              onChangeText={setfullName}
               style={styles.input}
             />
           </View>
@@ -147,10 +127,24 @@ const SignUp = ({ navigation }) => {
   );
 };
 
+// Custom InputField Component
+const InputField = ({ label, icon, error, ...props }) => (
+  <View style={styles.inputWrapper}>
+    <Text style={styles.label}>{label}</Text>
+    <View style={styles.inputField}>
+      <MaterialCommunityIcons name={icon} size={20} color={COLORS.gray} style={styles.iconStyle} />
+      <TextInput style={styles.input} {...props} />
+    </View>
+    {error && <Text style={styles.errorText}>{error}</Text>}
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    backgroundColor: COLORS.white,
     justifyContent: "center",
+    paddingHorizontal: 20,
   },
   heading: {
     textAlign: "center",
@@ -159,15 +153,8 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     marginBottom: SIZES.large,
   },
-  inputWrapper: {
-    marginBottom: 20,
-  },
-  label: {
-    fontFamily: "regular",
-    fontSize: SIZES.small,
-    color: COLORS.black,
-    marginBottom: 5,
-  },
+  inputWrapper: { marginBottom: 20 },
+  label: { fontFamily: "regular", fontSize: SIZES.small, color: COLORS.black, marginBottom: 5 },
   inputField: {
     flexDirection: "row",
     alignItems: "center",
@@ -178,14 +165,8 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 15,
   },
-  input: {
-    flex: 1,
-    color: COLORS.black,
-    fontFamily: "regular",
-  },
-  iconStyle: {
-    marginRight: 10,
-  },
+  input: { flex: 1, color: COLORS.black, fontFamily: "regular" },
+  iconStyle: { marginRight: 10 },
   signUpButton: {
     height: 50,
     backgroundColor: COLORS.black,
@@ -194,20 +175,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: SIZES.large,
   },
-  signUpButtonText: {
-    color: COLORS.white,
-    fontFamily: "bold",
-    fontSize: SIZES.medium,
-  },
-  registerTextContainer: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-  registerText: {
-    color: COLORS.primary,
-    fontFamily: "regular",
-    fontSize: SIZES.medium,
-  },
+  signUpButtonText: { color: COLORS.white, fontFamily: "bold", fontSize: SIZES.medium },
+  registerTextContainer: { marginTop: 10, alignItems: "center" },
+  registerText: { color: COLORS.primary, fontFamily: "regular", fontSize: SIZES.medium },
+  errorText: { color: "red", fontSize: SIZES.small, marginTop: 5 },
 });
 
 export default SignUp;
