@@ -45,7 +45,8 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
-  const [login, setLogin] = useState(false);
+  //const [login, setLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to manage login status
   const [errorMsg, setErrorMsg] = useState(null);
 
   const defaultAddress = {
@@ -87,23 +88,32 @@ export default function App() {
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      loginStatus();
+
+      // Check login status when the app loads
+      const userToken = await AsyncStorage.getItem('token');
+      if (userToken !== null) {
+        setIsLoggedIn(true); // User is logged in
+      } else {
+        setIsLoggedIn(false); // User is not logged in
+      }
     })();
   }, []);
 
-  const loginStatus = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('token');
-      if (userToken !== null) {
-        setLogin(true);
-      } else {
-        setLogin(false);
-      }
-      console.log("Login Status:", login);
-    } catch (error) {
-      console.error("Failed to retrieve login status:", error);
-    }
-  };
+  
+
+  // const loginStatus = async () => {
+  //   try {
+  //     const userToken = await AsyncStorage.getItem('token');
+  //     if (userToken !== null) {
+  //       setLogin(true);
+  //     } else {
+  //       setLogin(false);
+  //     }
+  //     console.log("Login Status:", login);
+  //   } catch (error) {
+  //     console.error("Failed to retrieve login status:", error);
+  //   }
+  // };
 
   if (!fontsLoaded) {
     return null; // Show splash or loading screen
@@ -112,10 +122,33 @@ export default function App() {
   return (
     <UserLocationContext.Provider value={{ location, setLocation }}>
       <UserReservedGeoCode.Provider value={{ address, setAddress }}>
-        <LoginContext.Provider value={{ login, setLogin }}>
+        {/* <LoginContext.Provider value={{ login, setLogin }}> */}
           <SafeAreaView style={{ flex: 1 }}>
             <NavigationContainer>
               <Stack.Navigator>
+
+              {isLoggedIn ? (
+                  // If the user is logged in, show the BottomTab navigation
+                  <Stack.Screen
+                    name="Reservation"
+                    component={BottomTab}
+                    options={{
+                      headerStyle: { backgroundColor: COLORS.offwhite },
+                      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                    }}
+                  />
+                ) : (
+                  // If the user is not logged in, show the Login screen first
+                  <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{
+                      headerStyle: { backgroundColor: COLORS.offwhite },
+                      headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
+                    }}
+                  />
+                )}
+
                 <Stack.Screen
                   name="Reservation"
                   component={BottomTab}
@@ -135,14 +168,6 @@ export default function App() {
                 <Stack.Screen
                   name="Sign-Up"
                   component={SignUp}
-                  options={{
-                    headerStyle: { backgroundColor: COLORS.offwhite },
-                    headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
-                  }}
-                />
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
                   options={{
                     headerStyle: { backgroundColor: COLORS.offwhite },
                     headerTitleStyle: { fontWeight: "bold", color: COLORS.dark },
@@ -321,7 +346,7 @@ export default function App() {
               </Stack.Navigator>
             </NavigationContainer>
           </SafeAreaView>
-        </LoginContext.Provider>
+        {/* </LoginContext.Provider> */}
       </UserReservedGeoCode.Provider>
     </UserLocationContext.Provider>
   );

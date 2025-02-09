@@ -7,8 +7,8 @@ import Reservations from "../screens/Reservations";
 import Favorites from "../screens/Favorites";
 import Profile from "../screens/Profile";
 import { COLORS } from "../constants/theme";
-import { LoginContext } from "../context/LoginContext";
-import Login from "../screens/Login";
+// import { LoginContext } from "../context/LoginContext";
+// import Login from "../screens/Login";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,8 +25,8 @@ const tabBarStyle = {
 };
 
 const BottomTab = () => {
-  const {login, setLogin} = useContext(LoginContext)
-  console.log(login);
+  // const {login, setLogin} = useContext(LoginContext)
+  // console.log(login);
   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.dark }}>

@@ -26,14 +26,15 @@ const validationSchema = Yup.object().shape({
 const Login = ({ navigation }) => {
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post("http://192.168.147.93:8080/api/user/login", values);
+      const response = await axios.post("http://192.168.1.162:8080/api/user/login", values);
+      console.log("Response:", response.data);
   
       if (response.data.success) {
         await AsyncStorage.setItem("loggedInUser", JSON.stringify(response.data.user));
         Alert.alert("Success", "Login Successfully");
-
-       // Use navigation.replace instead of CommonActions.reset
-       navigation.replace("Reservation");
+  
+        // Use navigation.replace instead of CommonActions.reset
+        navigation.replace("Reservation");
       } else {
         Alert.alert("Error", response.data.message);
       }

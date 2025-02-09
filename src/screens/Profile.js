@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,42 +10,37 @@ import {
   Pressable,
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants/theme"; // Assuming these constants are defined in your project
+import { COLORS, SIZES } from "../constants/theme";
 import RegistrationTile from "../components/RegistrationTile";
 import { useNavigation } from "@react-navigation/native";
-
-// Mock user data
-const profiles = [
-  {
-    user_id: 1001,
-    username: "Foodie123",
-    email: "foodie123@example.com",
-    uid: "UID001",
-    address: ["123 Main Street, NY"],
-    userType: "Admin",
-    profile_img:
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    updatedAt: "2025-01-20",
-  },
-  {
-    user_id: 1002,
-    username: "SuperAdmin",
-    email: "superadmin@example.com",
-    uid: "UID002",
-    address: ["456 Another St, CA"],
-    userType: "SuperAdmin",
-    profile_img:
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    updatedAt: "2025-01-20",
-  },
-];
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = () => {
   const navigation = useNavigation();
   const [addressVisible, setAddressVisible] = useState(false);
+  const [user, setUser] = useState(null); // State to hold the logged-in user data
 
-  // User data (mock for now)
-  const user = profiles[0];
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("loggedInUser");
+        if (userData) {
+          setUser(JSON.parse(userData)); // Parse and set user data
+        }
+      } catch (error) {
+        console.error("Error retrieving user data from AsyncStorage", error);
+      }
+    };
+    getUserData();
+  }, []);
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.username}>Loading...</Text> {/* or show a loading spinner */}
+      </View>
+    );
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
@@ -55,13 +50,13 @@ const Profile = () => {
           source={{ uri: user.profile_img }}
           style={styles.profileImage}
         />
-        <Text style={styles.username}>{user.username}</Text>
+        <Text style={styles.username}>{user.name} {user.surname}</Text>
         <Text style={styles.email}>{user.email}</Text>
+        <Text style={styles.email}>{user.phone}</Text>
       </View>
 
       {/* Buttons Section */}
       <View style={styles.optionsContainer}>
-        {/* Address Button */}
         <TouchableOpacity
           style={styles.optionButton}
           onPress={() => setAddressVisible(true)}
@@ -78,15 +73,15 @@ const Profile = () => {
 
         {/* Favorites */}
         <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("Favorites")}>
-          <AntDesign name="heart" size={24} color={COLORS.primary}  />
-          <Text style={styles.optionText} >Favorites</Text>
+          <AntDesign name="heart" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Favorites</Text>
         </TouchableOpacity>
 
         {/* AdminPanel */}
         <TouchableOpacity
           style={styles.optionButton}
           onPress={() => {
-            if (user.user_id === 1002) {
+            if (user.user_id === '67a2114906cd0f19b5f6a825') {
               navigation.navigate("SuperAdminDashboard");
             } else {
               navigation.navigate("AdminDashboard");
@@ -130,7 +125,8 @@ const Profile = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalHeading}>User Address</Text>
-            <Text style={styles.modalText}>{user.address[0]}</Text>
+            <Text style={styles.modalText}>{user.address}, {user.city}</Text>
+            <Text style={styles.modalText}>{user.country}</Text>
             <Pressable
               style={styles.closeButton}
               onPress={() => setAddressVisible(false)}
