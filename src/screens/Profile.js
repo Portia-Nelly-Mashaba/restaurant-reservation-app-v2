@@ -50,10 +50,15 @@ const Profile = () => {
   const user = profiles[1];
 
   const handleLogin = () => {
-    // Implement your login logic here
     console.log("Login Button Pressed");
-    // For example, navigate to the Home page
     navigation.navigate("Home");
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    console.log("User logged out");
+    // Clear user session or any state if needed
+    navigation.navigate("Login");  // Redirect to Login screen after logout
   };
 
   const scrollToTop = () => {
@@ -99,8 +104,8 @@ const Profile = () => {
 
         {/* Favorites */}
         <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate("Favorites")}>
-          <AntDesign name="heart" size={24} color={COLORS.primary}  />
-          <Text style={styles.optionText} >Favorites</Text>
+          <AntDesign name="heart" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Favorites</Text>
         </TouchableOpacity>
 
         {/* AdminPanel */}
@@ -133,7 +138,7 @@ const Profile = () => {
         </TouchableOpacity>
 
         {/* Logout */}
-        <TouchableOpacity style={[styles.optionButton, styles.logoutButton]}>
+        <TouchableOpacity style={[styles.optionButton, styles.logoutButton]} onPress={handleLogout}>
           <AntDesign name="logout" size={24} color="red" />
           <Text style={[styles.optionText, { color: "red" }]}>Logout</Text>
         </TouchableOpacity>
