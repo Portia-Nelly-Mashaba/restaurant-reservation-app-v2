@@ -15,14 +15,39 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  // const handleLogin = () => {
+  //   if (!email || !password) {
+  //     Alert.alert("Error", "Please add email or password");
+  //   } else {
+  //     Alert.alert("Success","Login Successfully");
+  //     navigation.navigate("Reservation");
+  //   }
+  // };
+
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please add email or password");
-    } else {
-      Alert.alert("Success","Login Successfully");
-      navigation.navigate("Reservation");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:8080/api/user/login", {
+        email,
+        password,
+      });
+  
+      if (response.data.success) {
+        Alert.alert("Success", "Login Successfully");
+        navigation.navigate("Reservation");
+      } else {
+        Alert.alert("Error", response.data.message);
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      Alert.alert("Error", "Invalid credentials or server issue");
     }
   };
+  
 
   return (
     <ScrollView
