@@ -78,44 +78,19 @@ const RegisterRestaurant = ({ navigation }) => {
 
     const handleSubmit = async (values) => {
         try {
-            // Prepare the payload to match the backend's expected structure
-            const payload = {
-                email: values.email,
-                phone: values.phone,
-                address: values.address,
-                city: values.city,
-                country: values.country,
-                facebook: values.facebook,
-                instagram: values.instagram,
-                twitter: values.twitter,
-                hoursOfOperation: values.hoursOfOperation,
-                holidayHours: values.holidayHours,
-                cuisineType: values.cuisineType,
-                averagePrice: values.averagePrice,
-                reservationAllowed: values.reservationAllowed,
-                advanceReservationPeriod: values.advanceReservationPeriod,
-                advanceReservationPeriodHours: values.advanceReservationPeriodHours,
-                maxPartySize: values.maxPartySize,
-                menuItems: values.menuItems,
-                alcoholServices: alcohol, // Use the state value for alcohol
-                dessertService: dessert, // Use the state value for dessert
-                specialMenus: specialMenus, // Include special menus
-                restaurantFeatures: restaurantFeatures, // Include restaurant features
-            };
-    
-            // Send the POST request to the backend
-            const response = await axios.post("http://192.168.1.162:8080/api/restaurant", payload);
-    
-            // Handle success
-            Alert.alert("Success", "Restaurant registration successful!");
-            navigation.navigate("Home"); // Navigate to the home screen or another appropriate screen
+            const response = await axios.post("http://localhost:8080/api/restaurant/register", values);
+            Alert.alert("Success", "Registration successful!");
+            navigation.navigate("Home");
         } catch (error) {
-            // Handle errors
-            console.error("Error:", error);
-            Alert.alert(
-                "Error",
-                error.response?.data?.message || "An error occurred while registering the restaurant."
-            );
+            Alert.alert("Error", error.response?.data?.message || "Server error");
+        }
+    };
+
+    const handleSpecialMenuSelection = (menu) => {
+        if (specialMenus.includes(menu)) {
+            setSpecialMenus(specialMenus.filter((item) => item !== menu));
+        } else {
+            setSpecialMenus([...specialMenus, menu]);
         }
     };
 

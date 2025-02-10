@@ -4,7 +4,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import testRoutes from './routes/testRoutes.js'
-import restaurantRouter from './routes/restaurantRouter.js'
+import restaurantRoutes from './routes/restaurantRoutes.js'
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRouter.js'
 import cookieParser from 'cookie-parser'
@@ -42,7 +42,7 @@ app.use(fileUpload());
 //route
 app.use('/api', testRoutes);
 app.use('/api/user', userRoutes);
-app.use('api/restaurant', restaurantRouter)
+app.use('/api/restaurant', restaurantRoutes);
 
 app.get('/', (req, res) => {
     return res.status(200).send("<h1>Welcome To Restaurant Reserve App by Portia</h1>");

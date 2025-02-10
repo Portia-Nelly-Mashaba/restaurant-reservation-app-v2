@@ -1,65 +1,48 @@
-import Restaurant from '../models/restaurantModel.js';
+//GET ALL RESTAUNTS
 
-// Create a new restaurant
-export const createRestaurant = async (req, res) => {
-  try {
-    const restaurant = new Restaurant(req.body);
-    await restaurant.save();
-    res.status(201).json(restaurant);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+import restaurantModel from "../models/restaurantModel.js";
 
-// Get all restaurants
-export const getAllRestaurants = async (req, res) => {
-  try {
-    const restaurants = await Restaurant.find();
-    res.status(200).json(restaurants);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Get a restaurant by ID
-export const getRestaurantById = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findById(req.params.id);
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+export const getAllRestaurantsController = async (req, res) => {
+    try{
+        const restaurants  = await restaurantModel.find({})
+        res.status(200).send({
+            success:true,
+            message: 'all restaurants fetched successfully',
+            restaurants
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message: 'Error in Get All Restaurant API',
+            error
+        })
     }
-    res.status(200).json(restaurant);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
-// Update a restaurant
-export const updateRestaurant = async (req, res) => {
-  try {
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedRestaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+//GET SINGLE RESTAURANT
+export const getSingleRestaurantController = async (req, res) => {
+    try{
+        const restaurant = await restaurantModel.findById(req.params.id)
+        //validation
+        if(!restaurant){
+            return res.status(404).send({
+                success:false,
+                message: 'restaurant not found'
+            })
+        }
+        res.status(200).send({
+            success:true,
+            message: 'restaurant found',
+            restaurant,
+        })
+    } catch (error) {
+        console.log(error);
+        
+        res.status(500).send({
+            success:false,
+            message: 'Error in Get Single Restaurant API',
+            error
+        })
     }
-    res.status(200).json(updatedRestaurant);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Delete a restaurant
-export const deleteRestaurant = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findByIdAndDelete(req.params.id);
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
-    }
-    res.status(200).json({ message: 'Restaurant deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
