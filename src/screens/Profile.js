@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,10 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  Button,
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants/theme"; // Assuming these constants are defined in your project
+import { COLORS, SIZES } from "../constants/theme";
 import RegistrationTile from "../components/RegistrationTile";
 import { useNavigation } from "@react-navigation/native";
 
@@ -43,12 +44,32 @@ const profiles = [
 const Profile = () => {
   const navigation = useNavigation();
   const [addressVisible, setAddressVisible] = useState(false);
+  const scrollViewRef = useRef();  // Reference for ScrollView
 
   // User data (mock for now)
   const user = profiles[1];
 
+  const handleLogin = () => {
+    // Implement your login logic here
+    console.log("Login Button Pressed");
+    // For example, navigate to the Home page
+    navigation.navigate("Home");
+  };
+
+  const scrollToTop = () => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  const scrollToBottom = () => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  };
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
+    <ScrollView
+      ref={scrollViewRef}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+    >
       {/* Profile Header */}
       <View style={styles.profileHeader}>
         <Image
@@ -116,6 +137,12 @@ const Profile = () => {
           <AntDesign name="logout" size={24} color="red" />
           <Text style={[styles.optionText, { color: "red" }]}>Logout</Text>
         </TouchableOpacity>
+
+        {/* Login Button */}
+        <TouchableOpacity style={styles.optionButton} onPress={handleLogin}>
+          <AntDesign name="login" size={24} color={COLORS.primary} />
+          <Text style={styles.optionText}>Login</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Address Modal */}
@@ -138,6 +165,16 @@ const Profile = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Scroll Up/Down Buttons */}
+      <View style={styles.scrollButtonsContainer}>
+        <TouchableOpacity style={styles.scrollButton} onPress={scrollToTop}>
+          <AntDesign name="arrowup" size={24} color={COLORS.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.scrollButton} onPress={scrollToBottom}>
+          <AntDesign name="arrowdown" size={24} color={COLORS.primary} />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -222,6 +259,20 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: COLORS.white,
     fontSize: 16,
+  },
+  scrollButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 20,
+  },
+  scrollButton: {
+    backgroundColor: COLORS.white,
+    padding: 10,
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
 });
 
