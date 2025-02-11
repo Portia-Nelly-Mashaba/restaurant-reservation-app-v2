@@ -1,5 +1,6 @@
 import express from 'express'
-import { getAllRestaurantsController, getSingleRestaurantController } from '../controllers/restaurantController.js';
+import { createRestaurantController, getAllRestaurantsController, getSingleRestaurantController } from '../controllers/restaurantController.js';
+import { isAuth } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -8,6 +9,8 @@ const router = express.Router();
 router.get('/get-all', getAllRestaurantsController)
 
 router.get('/:id', getSingleRestaurantController)
+
+router.post('/create', isAuth, createRestaurantController)
 
 
 export default router
