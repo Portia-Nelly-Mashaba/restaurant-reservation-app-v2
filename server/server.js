@@ -4,6 +4,11 @@ import morgan from 'morgan'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import testRoutes from './routes/testRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js';
+import createReviewRoutes from "./routes/createReviewControllerRoutes.js"; 
+import menuRoutes from './routes/menuRoutes.js';
+import restaurantRoutes from './routes/restaurantRoutes.js'
+import socialRoutes from "./routes/socialRoutes.js";
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRouter.js'
 import cookieParser from 'cookie-parser'
@@ -39,8 +44,16 @@ app.use(fileUpload());
 // }));
 
 //route
+
+
+// Add category routes
+app.use('/api', categoryRoutes);
+app.use("/api", socialRoutes);
+app.use('/api', menuRoutes);
 app.use('/api', testRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api', createReviewRoutes);
+app.use('/api/restaurant', restaurantRoutes);
 
 app.get('/', (req, res) => {
     return res.status(200).send("<h1>Welcome To Restaurant Reserve App by Portia</h1>");
