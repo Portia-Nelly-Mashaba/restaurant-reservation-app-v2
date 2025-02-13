@@ -1,68 +1,83 @@
-import express from 'express'
-import colors from 'colors'
-import morgan from 'morgan'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import testRoutes from './routes/testRoutes.js'
-import categoryRoutes from './routes/categoryRoutes.js';
-import createReviewRoutes from "./routes/createReviewControllerRoutes.js"; 
-import menuRoutes from './routes/menuRoutes.js';
-import restaurantRoutes from './routes/restaurantRoutes.js'
+import express from "express";
+import colors from "colors";
+import morgan from "morgan";
+import cors from "cors";
+import dotenv from "dotenv";
+import testRoutes from "./routes/testRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import socialRoutes from "./routes/socialRoutes.js";
-import connectDB from './config/db.js'
-import userRoutes from './routes/userRouter.js'
-import cookieParser from 'cookie-parser'
-import cloudinary from 'cloudinary'
-import fileUpload from 'express-fileupload';
+import createReviewRoutes from "./routes/createReviewControllerRoutes.js";
+import menuRoutes from './routes/menuRoutes.js';
+import restaurantRoutes from './routes/restaurantRoutes.js';
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRouter.js";
+import cookieParser from "cookie-parser";
+import cloudinary from "cloudinary";
+import fileUpload from "express-fileupload";
 
-//dot env config
+// dotenv configuration
 dotenv.config();
 
-//connect database
+// Connect to MongoDB
 connectDB();
 
-//cloudinary config
+// Cloudinary configuration
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_SECRET,
-})
+});
 
-const app = express()
+// Initialize Express app
+const app = express();
 
-//middleware
-app.use(morgan('dev'));
+// Middleware
+app.use(morgan("dev"));
 app.use(express.json());
-app.use(cors());
-app.use(cookieParser())
-
+app.use(
+    cors({
+        origin: ["http://localhost:3000"], // Adjust based on your frontend URL
+        credentials: true,
+    })
+);
+app.use(cookieParser());
 app.use(fileUpload());
 
-// app.use(cors({
-//     origin: "http://localhost:8080", // Change this to match your frontend URL
-//     credentials: true // Allows cookies to be sent
-// }));
-
-//route
+// Routes
 
 
-// Add category routes
-app.use('/api', categoryRoutes);
-app.use("/api", socialRoutes);
+// Use the route in your app
 app.use('/api', menuRoutes);
-app.use('/api', testRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api', createReviewRoutes);
-app.use('/api/restaurant', restaurantRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", socialRoutes);
+app.use("/api", testRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api", createReviewRoutes);
+console.log("Restaurant routes are registered");
+app.use('/api', restaurantRoutes);
 
-app.get('/', (req, res) => {
-    return res.status(200).send("<h1>Welcome To Restaurant Reserve App by Portia</h1>");
+
+app.get("/", (req, res) => {
+    return res
+        .status(200)
+        .send("<h1>Welcome To Restaurant Reserve App by Portia</h1>");
 });
-//port
-const PORT = process.env.PORT || 3008;
 
-//listen
-app.listen(PORT, () => {
-    console.log(`Server Running on PORT ${PORT} on ${process.env.NODE_ENV}`.bgMagenta.white);
-    
-})
+// Catch-all for unmatched routes
+app.use((req, res, next) => {
+    res.status(404).send({
+        success: false,
+        message: `Route ${req.originalUrl} not found.`,
+    });
+});
+
+// Port
+const PORT = process.env.PORT || 8080;
+
+// Listen on all network interfaces (0.0.0.0)
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(
+        `🚀 Server Running on http://192.168.8.199:${PORT} in ${process.env.NODE_ENV} mode`
+            .bgBlue.white
+    );
+});

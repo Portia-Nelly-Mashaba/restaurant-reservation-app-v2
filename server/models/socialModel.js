@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const socialSchema = new mongoose.Schema(
     {
         restaurant: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Restaurants', // Reference to Restaurant model
+            ref: "Restaurants", // Reference to Restaurant model
             required: true,
         },
         facebook: {
@@ -20,9 +20,9 @@ const socialSchema = new mongoose.Schema(
             trim: true,
         },
     },
-    { timestamps: true }
+    { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
-const socialModel = mongoose.model('Socials', socialSchema);
+const socialModel = mongoose.model("Social", socialSchema);
 
 export default socialModel;

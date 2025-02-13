@@ -15,11 +15,14 @@ export const createMenuItemController = async (req, res) => {
 export const getAllMenuItemsController = async (req, res) => {
     try {
         const menuItems = await menuModel.find().populate('restaurant category');
+        console.log('Menu Items:', menuItems); // Log retrieved data
         res.status(200).json(menuItems);
     } catch (error) {
+        console.error('Error fetching menu items:', error); // Log errors
         res.status(400).json({ message: error.message });
     }
 };
+
 
 // Get a single menu item by ID
 export const getMenuItemByIdController = async (req, res) => {
