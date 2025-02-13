@@ -1,142 +1,85 @@
-//GET ALL RESTAUNTS
+import restaurantModel from '../models/restaurantModel.js';
 
-import restaurantModel from "../models/restaurantModel.js";
-import categoryModel from "../models/categoryModel.js";
-
-export const getAllRestaurantsController = async (req, res) => {
-    try{
-        const restaurants  = await restaurantModel.find({})
-        res.status(200).send({
-            success:true,
-            message: 'all restaurants fetched successfully',
-            restaurants
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            success:false,
-            message: 'Error in Get All Restaurant API',
-            error
-        })
-    }
-};
-
-//GET SINGLE RESTAURANT
-export const getSingleRestaurantController = async (req, res) => {
-    try{
-        const restaurant = await restaurantModel.findById(req.params.id)
-        //validation
-        if(!restaurant){
-            return res.status(404).send({
-                success:false,
-                message: 'restaurant not found'
-            })
-        }
-        res.status(200).send({
-            success:true,
-            message: 'restaurant found',
-            restaurant,
-        })
-    } catch (error) {
-        console.log(error);
-        // cast erropr || OBJECT ID
-        if(error.name === 'CastError'){
-            return res.status(500).send({
-                success:false,
-                message: 'Invalid Id',
-            });
-        }
-        res.status(500).send({
-            success:false,
-            message: 'Error in Get Single Restaurant API',
-            error
-        })
-    }
-};
-
-export const createRestaurantController = async (req, res) => {
+// Create a new restaurant
+export const createRestaurant = async (req, res) => {
     try {
-        // Extract user ID from authentication middleware
-        const owner = req.user.id;
-
-        let {
-            title,
-            categoryName, 
-            address,
-            city,
-            country,
-            phone,
-            status,
-            hoursOfOperation,
-            holidayHours,
-            averagePrice,
-            advanceReservationPeriod,
-            advanceReservationPeriodHours,
-            maxPartySize,
-            imageUrl,
-            features,
-            reviews,
-            isFavorite,
-            additionalInformation,
-            restaurantFeatures,
-        } = req.body;
-
-        // Validate required fields
-        if (!title || !categoryName || !address || !city || !country || !phone || !hoursOfOperation || !averagePrice || !imageUrl) {
-            return res.status(400).json({
-                success: false,
-                message: 'Missing required fields',
-            });
-        }
-
-        // Fetch category ID based on category name
-        const category = await categoryModel.findOne({ name: categoryName });
-        if (!category) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid category name',
-            });
-        }
-
-        // Create a new restaurant with resolved references
-        const newRestaurant = new restaurantModel({
-            title,
-            owner, // Auto-assigned from authenticated user
-            category_id: category._id, // Auto-assigned from category name
-            address,
-            city,
-            country,
-            phone,
-            status,
-            hoursOfOperation,
-            holidayHours,
-            averagePrice,
-            reservationPolicy: {
-                advanceReservationPeriod,
-                advanceReservationPeriodHours,
-                maxPartySize,
-            },
-            imageUrl,
-            features,
-            reviews,
-            isFavorite,
-            additionalInformation,
-            restaurantFeatures,
-        });
-
-        // Save to database
-        await newRestaurant.save();
-
-        res.status(201).json({
-            success: true,
-            message: 'Restaurant created successfully',
-            restaurant: newRestaurant,
-        });
+        const newRestaurant = new restaurantModel(req.body);
+        const savedRestaurant = await newRestaurant.save();
+        res.status(201).json(savedRestaurant);
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error creating restaurant',
-            error: error.message,
-        });
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Get all restaurants
+export const getAllRestaurants = async (req, res) => {
+    try {
+        const restaurants = await restaurantModel.find().populate('owner').populate('category_id');
+        res.status(200).json(restaurants);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get a single restaurant by ID
+export const getRestaurantById = async (req, res) => {
+    try {
+        const restaurant = await restaurantModel.findById(req.params.id).populate('owner').populate('category_id');
+        if (!restaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+        res.status(200).json(restaurant);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Update a restaurant by ID
+export const updateRestaurant = async (req, res) => {
+    try {
+        const updatedRestaurant = await restaurantModel.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        ).populate('owner').populate('category_id');
+        if (!updatedRestaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+        res.status(200).json(updatedRestaurant);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Delete a restaurant by ID
+export const deleteRestaurant = async (req, res) => {
+    try {
+        const deletedRestaurant = await restaurantModel.findByIdAndDelete(req.params.id);
+        if (!deletedRestaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+        res.status(200).json({ message: 'Restaurant deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get restaurants by category ID
+export const getRestaurantsByCategory = async (req, res) => {
+    try {
+        const restaurants = await restaurantModel.find({ category_id: req.params.categoryId }).populate('owner').populate('category_id');
+        res.status(200).json(restaurants);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get restaurants by owner ID
+export const getRestaurantsByOwner = async (req, res) => {
+    try {
+        const restaurants = await restaurantModel.find({ owner: req.params.ownerId }).populate('owner').populate('category_id');
+        res.status(200).json(restaurants);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
