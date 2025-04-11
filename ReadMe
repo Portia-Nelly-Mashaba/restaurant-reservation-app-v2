@@ -1,0 +1,228 @@
+# Restaurant Reservation App
+
+
+A mobile application built with **React Native** that allows users to search for restaurants, view available reservation slots, and make bookings, paired with an admin dashboard for restaurant owners to manage reservations and details. The backend is powered by **Node.js** and **MongoDB**, ensuring robust data handling and scalability.
+
+## Table of Contents
+- [Features](#features)
+- [Technologies](#technologies)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running the App](#running-the-app)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
+  - [User Interface](#user-interface)
+  - [Admin Dashboard](#admin-dashboard)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Features
+### User Features
+- **Search Restaurants**: Find restaurants by location, cuisine, or other criteria.
+- **View Details**: Browse restaurant details (name, location, cuisine, ratings) and available reservation slots.
+- **Make Reservations**: Select a date and time via a calendar view to book a table.
+- **Manage Reservations**: View, edit, or cancel reservations.
+- **Feedback & Reviews**: Leave ratings and reviews for restaurants.
+- **Push Notifications**: Receive reminders for upcoming reservations.
+- **Payments**: Secure online payments via integrated payment gateway.
+- **Mobile Responsive**: Seamless experience on smartphones and tablets.
+
+### Admin Features
+- **Reservation Management**: View, approve, or cancel reservations.
+- **Restaurant Details**: Add or update restaurant information (e.g., menu, hours).
+- **Analytics Dashboard**: Visualize reservation trends and data with charts.
+- **Slot Management**: Control available reservation slots.
+- **Secure Access**: Role-based authentication for admin-only features.
+
+### Backend & Security
+- **Node.js Backend**: Handles requests, reservations, and data updates.
+- **MongoDB Database**: Stores restaurant, reservation, and user data.
+- **Authentication**: Secure user login with role-based access control.
+- **Notifications**: Real-time alerts for reservation updates.
+
+## Technologies
+- **Frontend**: React Native (for iOS and Android)
+- **Backend**: Node.js with Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT (JSON Web Tokens) or similar
+- **Payment Gateway**: Stripe or PayPal (configurable)
+- **Notifications**: Firebase Cloud Messaging (FCM) or OneSignal
+- **Charts**: Chart.js or Recharts (for admin dashboard analytics)
+- **Hosting**: Heroku, AWS, or similar (for backend); App Store/Google Play (for mobile)
+
+## Prerequisites
+Before setting up the project, ensure you have:
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [MongoDB](https://www.mongodb.com/) (local or Atlas)
+- [React Native CLI](https://reactnative.dev/docs/environment-setup) or [Expo CLI](https://expo.dev/)
+- [Yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
+- An IDE like [VS Code](https://code.visualstudio.com/)
+- [Android Studio](https://developer.android.com/studio) (for Android emulator) or [Xcode](https://developer.apple.com/xcode/) (for iOS emulator)
+- Accounts for:
+  - MongoDB Atlas (if using cloud database)
+  - Payment gateway (e.g., Stripe)
+  - Push notification service (e.g., Firebase)
+
+## Installation
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Portia-Nelly-Mashaba/restaurant-reservation-app-v2.git
+   cd restaurant-reservation-app
+   ```
+
+2. **Install Frontend Dependencies**:
+   ```bash
+   cd client
+   yarn install
+   # or
+   npm install
+   ```
+
+3. **Install Backend Dependencies**:
+   ```bash
+   cd ../server
+   yarn install
+   # or
+   npm install
+   ```
+
+4. **Set Up Environment Variables**:
+   - Create a `.env` file in the `server` directory:
+     ```env
+     MONGO_URI=mongodb://localhost/restaurant-app
+     JWT_SECRET=your_jwt_secret
+     PORT=5000
+     STRIPE_SECRET_KEY=your_stripe_key
+     FIREBASE_API_KEY=your_firebase_key
+     ```
+   - Create a `.env` file in the `client` directory (if needed):
+     ```env
+     API_URL=http://localhost:5000/api
+     ```
+
+5. **Set Up MongoDB**:
+   - If using local MongoDB, ensure it’s running (`mongod`).
+   - If using MongoDB Atlas, update `MONGO_URI` in `.env`.
+
+## Running the App
+1. **Start the Backend**:
+   ```bash
+   cd server
+   yarn start
+   # or
+   npm start
+   ```
+   The server will run on `http://localhost:5000` (or your configured port).
+
+2. **Start the React Native App**:
+   ```bash
+   cd client
+   yarn start
+   # or
+   npm start
+   ```
+   - For iOS:
+     ```bash
+     yarn ios
+     # or
+     npm run ios
+     ```
+   - For Android:
+     ```bash
+     yarn android
+     # or
+     npm run android
+     ```
+
+3. **Access the App**:
+   - Open the app on an emulator/simulator or physical device via Expo Go (if using Expo).
+   - The backend API should be accessible at the configured `API_URL`.
+
+## Project Structure
+```
+restaurant-reservation-app/
+├── client/                   # React Native frontend
+│   ├── src/
+│   │   ├── components/       # Reusable UI components
+│   │   ├── screens/          # App screens (Home, Search, Reservation, etc.)
+│   │   ├── navigation/       # Navigation setup (e.g., React Navigation)
+│   │   ├── assets/           # Images, fonts, etc.
+│   │   └── services/         # API calls and utilities
+│   ├── .env                  # Frontend environment variables
+│   └── package.json
+├── server/                   # Node.js backend
+│   ├── src/
+│   │   ├── models/           # MongoDB schemas (User, Restaurant, Reservation)
+│   │   ├── routes/           # API routes (auth, restaurants, reservations)
+│   │   ├── controllers/      # Route handlers
+│   │   ├── middleware/       # Authentication, error handling
+│   │   └── config/           # Database connection, constants
+│   ├── .env                  # Backend environment variables
+│   └── package.json
+├── docs/                     # Documentation (user guides, API docs)
+└── README.md
+```
+
+## Usage
+### User Interface
+- **Home Screen**: Search for restaurants by location or cuisine.
+- **Restaurant Details**: View name, cuisine, location, reviews, and a calendar for reservation slots.
+- **Reservation Flow**:
+  1. Select a restaurant.
+  2. Choose a date/time from the calendar.
+  3. Confirm booking via secure payment.
+- **Profile**: Manage reservations, view history, and submit reviews.
+- **Notifications**: Receive push alerts for booking confirmations or reminders.
+
+### Admin Dashboard
+- **Login**: Secure access with restaurant-specific credentials.
+- **Dashboard**: View reservation analytics (e.g., bookings per day) via charts.
+- **Manage Slots**: Add or update available reservation times.
+- **Restaurant Info**: Edit details like menu, hours, or contact.
+- **Reservations**: Approve, cancel, or view booking history.
+
+
+## API Documentation
+The backend exposes RESTful APIs for:
+- User authentication (`/api/auth/login`, `/api/auth/register`)
+- Restaurant search and details (`/api/restaurants`)
+- Reservations (`/api/reservations`)
+- Admin actions (`/api/admin`)
+
+
+Example:
+```bash
+GET /api/restaurants?location=New+York&cuisine=Italian
+```
+
+## Testing
+- **Unit Tests**: Run Jest for frontend and backend logic.
+  ```bash
+  cd client
+  yarn test
+  cd ../server
+  yarn test
+  ```
+- **E2E Tests**: Use Detox or Appium for mobile app testing.
+- **Manual Testing**:
+  - Test on iOS/Android emulators and physical devices.
+  - Verify responsiveness, payments, and notifications.
+- **Cross-Browser**: Admin dashboard tested on Chrome, Firefox, Safari.
+
+## Deployment
+### Backend
+- Deploy to Heroku/AWS:
+  ```bash
+  heroku create
+  git push heroku main
+  ```
+- Set environment variables in the hosting platform.
+
+
+
+
+
